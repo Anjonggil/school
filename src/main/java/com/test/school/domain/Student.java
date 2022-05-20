@@ -19,20 +19,11 @@ public class Student {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
     private Long id;
-
-
-    @NotEmpty
     private String name;
-
-    @NotEmpty
     private int age;
-
-
     @Enumerated(EnumType.STRING)
-    @NotEmpty
     private SchoolType schoolType;
 
-    @NotEmpty
     private String phoneNumber;
 
 //    @OneToMany(mappedBy = "student")

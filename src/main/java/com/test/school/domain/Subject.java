@@ -1,5 +1,6 @@
 package com.test.school.domain;
 
+import com.test.school.domain.dto.SubjectDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,12 +21,19 @@ public class Subject {
 
     private String name;
 
-    @OneToMany(mappedBy = "subject")
-    private List<StudentSubject> studentSubjectList = new ArrayList<>();
+//    @OneToMany(mappedBy = "subject")
+//    private List<StudentSubject> studentSubjectList = new ArrayList<>();
 
     @Builder(builderMethodName = "of",builderClassName = "of")
     public Subject(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public SubjectDto toDto(){
+        return SubjectDto.of()
+                .id(this.id)
+                .name(this.name)
+                .build();
     }
 }

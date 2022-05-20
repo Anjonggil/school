@@ -4,9 +4,6 @@ import com.test.school.domain.SchoolType;
 import com.test.school.domain.Student;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.web.JsonPath;
-
-import java.util.List;
 
 @Getter
 public class StudentDto {

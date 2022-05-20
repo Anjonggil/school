@@ -8,6 +8,7 @@ import com.test.school.domain.dto.StudentDto;
 import com.test.school.repository.StudentRepository;
 import com.test.school.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,12 +17,14 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class StudentServiceImpl implements StudentService {
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
+    //학생 조회
     @Override
     public List<StudentDto> getStudents(){
         List<Student> studentList = studentRepository.findByAll();
@@ -29,12 +32,13 @@ public class StudentServiceImpl implements StudentService {
         return studentList.stream().map(Student::toDto).collect(Collectors.toList());
     }
 
+    //학생 등록
     @Transactional
     @Override
     public Long setStudent(StudentDto studentDto) {
-        Student student = studentDto.toEntity();
+        validateDuplicateStudent(studentDto.getPhoneNumber());
 
-        validateDuplicateStudent(student.getPhoneNumber());
+        Student student = studentDto.toEntity();
 
         if (!student.validateData()){
             throw new ApiException(ExceptionEnum.BAD_REQUEST_BODY);
@@ -44,6 +48,7 @@ public class StudentServiceImpl implements StudentService {
         return student.getId();
     }
 
+    //학생중복체크
     private void validateDuplicateStudent(String phoneNumber) {
         Student findStudent = studentRepository.findStudentByPhoneNumber(phoneNumber);
 
@@ -52,6 +57,7 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    //학생 삭제
     @Transactional
     @Override
     public Boolean deleteStudent(Long id) {
