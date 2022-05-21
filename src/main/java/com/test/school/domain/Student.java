@@ -17,11 +17,18 @@ public class Student {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
     private Long id;
+
+    @Column(name = "student_name",length = 50)
     private String name;
+
+    @Column(name = "age")
     private int age;
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "school_type",length = 10)
     private SchoolType schoolType;
 
+    @Column(name = "phone_number",length = 15)
     private String phoneNumber;
 
 //    @OneToMany(mappedBy = "student")
@@ -43,19 +50,5 @@ public class Student {
                 .schoolType(this.schoolType)
                 .phoneNumber(this.phoneNumber)
                 .build();
-    }
-
-    public boolean validateData() {
-        if (name.length() < 1 || name.length() > 16) return false;
-        if (age < 8 || age > 19) return false;
-        if (!validatePhoneNumber(phoneNumber)) return false;
-
-        return true;
-    }
-
-    private boolean validatePhoneNumber(String phoneNumber) {
-        Pattern pattern = Pattern.compile("\\d{3}-\\d{4}-\\d{4}");
-        Matcher matcher = pattern.matcher(phoneNumber);
-        return matcher.matches();
     }
 }

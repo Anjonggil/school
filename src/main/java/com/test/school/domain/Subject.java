@@ -18,6 +18,7 @@ public class Subject {
     @Column(name = "subject_id")
     private Long id;
 
+    @Column(name = "subject_name",length = 50)
     private String name;
 
 //    @OneToMany(mappedBy = "subject")
@@ -34,9 +35,5 @@ public class Subject {
                 .id(this.id)
                 .name(this.name)
                 .build();
-    }
-
-    public boolean validateData() {
-        return name.length() >= 1 && name.length() <= 16;
     }
 }

@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class ScoreController {
     public ResponseEntity<?> createScores(
             @PathVariable("studentId") Long studentId,
             @PathVariable("subjectId") Long subjectId,
-            @RequestBody ScoreRequest.Info scoreRequest){
+            @RequestBody @Valid ScoreRequest.Info scoreRequest){
 
         Long id = scoreService.createScores(scoreRequest, studentId, subjectId);
         if (id != null){
@@ -40,7 +42,7 @@ public class ScoreController {
     public ResponseEntity<?> updateScores(
             @PathVariable("studentId") Long studentId,
             @PathVariable("subjectId") Long subjectId,
-            @RequestBody ScoreRequest.Info scoreRequest){
+            @RequestBody @Valid ScoreRequest.Info scoreRequest){
         Score score = scoreService.updateScores(scoreRequest,studentId,subjectId);
         if (score != null && score.getScore() == scoreRequest.getScore()){
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);

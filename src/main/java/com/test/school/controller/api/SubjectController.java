@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class SubjectController {
     }
 
     @PostMapping("/subjects")
-    public ResponseEntity<?> createSubjects(@RequestBody SubjectRequest subjectRequest){
+    public ResponseEntity<?> createSubjects(@RequestBody @Valid SubjectRequest subjectRequest){
         Long id = subjectService.createSubjects(subjectRequest.getInfo());
         if (id != null){
             return new ResponseEntity<>(JsonResultData.ApiResultBuilder()

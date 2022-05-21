@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.regex.Pattern;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +32,7 @@ public class StudentController {
     }
 
     @PostMapping("/students")
-    public ResponseEntity<?> createStudents(@RequestBody StudentRequest student){
+    public ResponseEntity<?> createStudents(@RequestBody @Valid StudentRequest student){
         Long id = studentService.createStudents(student.getInfo());
         if (id != null){
             return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
