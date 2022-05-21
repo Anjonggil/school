@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 public class ScoreStudentResponse {
     private Double averageScore;
-    private List<Info> students;
+    private List<Info> students = new ArrayList<>();
 
     @Getter
     @Builder

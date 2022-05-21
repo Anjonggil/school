@@ -2,9 +2,9 @@ package com.test.school.controller.api;
 
 import com.test.school.common.JsonResultData;
 import com.test.school.domain.Score;
-import com.test.school.domain.dto.ScoreDto;
+import com.test.school.domain.request.ScoreRequest;
 import com.test.school.domain.response.ScoreStudentResponse;
-import com.test.school.domain.request.ScoreSubjectResponse;
+import com.test.school.domain.response.ScoreSubjectResponse;
 import com.test.school.service.ScoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,9 +22,9 @@ public class ScoreController {
     public ResponseEntity<?> createScores(
             @PathVariable("studentId") Long studentId,
             @PathVariable("subjectId") Long subjectId,
-            @RequestBody ScoreDto.Request scoreDto){
+            @RequestBody ScoreRequest.Info scoreRequest){
 
-        Long id = scoreService.createScores(scoreDto, studentId, subjectId);
+        Long id = scoreService.createScores(scoreRequest, studentId, subjectId);
         if (id != null){
             return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
                     .data(null)
@@ -40,9 +40,9 @@ public class ScoreController {
     public ResponseEntity<?> updateScores(
             @PathVariable("studentId") Long studentId,
             @PathVariable("subjectId") Long subjectId,
-            @RequestBody ScoreDto.Request scoreDto){
-        Score score = scoreService.updateScores(scoreDto,studentId,subjectId);
-        if (score != null && score.getScore() == scoreDto.getScore()){
+            @RequestBody ScoreRequest.Info scoreRequest){
+        Score score = scoreService.updateScores(scoreRequest,studentId,subjectId);
+        if (score != null && score.getScore() == scoreRequest.getScore()){
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         }else {
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);

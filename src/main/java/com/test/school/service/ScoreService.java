@@ -1,14 +1,14 @@
 package com.test.school.service;
 
 import com.test.school.domain.Score;
-import com.test.school.domain.dto.ScoreDto;
+import com.test.school.domain.request.ScoreRequest;
 import com.test.school.domain.response.ScoreStudentResponse;
-import com.test.school.domain.request.ScoreSubjectResponse;
+import com.test.school.domain.response.ScoreSubjectResponse;
 
 public interface ScoreService {
-    Long createScores(ScoreDto.Request scoreDto, Long studentId, Long subjectId);
+    Long createScores(ScoreRequest.Info scoreDto, Long studentId, Long subjectId);
 
-    Score updateScores(ScoreDto.Request scoreDto, Long studentId, Long subjectId);
+    Score updateScores(ScoreRequest.Info scoreDto, Long studentId, Long subjectId);
 
     Boolean deleteScore(Long studentId, Long subjectId);
 

@@ -1,4 +1,4 @@
-package com.test.school.domain.request;
+package com.test.school.domain.response;
 
 import com.test.school.domain.Score;
 import lombok.AllArgsConstructor;
@@ -6,13 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
 public class ScoreSubjectResponse {
     private Double averageScore;
-    private List<Info> subjects;
+    private List<Info> subjects = new ArrayList<>();
 
     @Getter
     @Builder

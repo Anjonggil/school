@@ -3,9 +3,9 @@ package com.test.school.service.impl;
 import com.test.school.domain.Student;
 import com.test.school.domain.Score;
 import com.test.school.domain.Subject;
-import com.test.school.domain.dto.ScoreDto;
+import com.test.school.domain.request.ScoreRequest;
 import com.test.school.domain.response.ScoreStudentResponse;
-import com.test.school.domain.request.ScoreSubjectResponse;
+import com.test.school.domain.response.ScoreSubjectResponse;
 import com.test.school.repository.ScoreRepository;
 import com.test.school.repository.StudentRepository;
 import com.test.school.repository.SubjectRepository;
@@ -26,7 +26,7 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     @Transactional
-    public Long createScores(ScoreDto.Request scoreDto, Long studentId, Long subjectId) {
+    public Long createScores(ScoreRequest.Info scoreDto, Long studentId, Long subjectId) {
         Student findStudent = studentRepository.findStudentById(studentId);
         if (findStudent == null){
             //TODO : 에러처리
@@ -48,7 +48,7 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     @Transactional
-    public Score updateScores(ScoreDto.Request scoreDto, Long studentId, Long subjectId) {
+    public Score updateScores(ScoreRequest.Info scoreDto, Long studentId, Long subjectId) {
         Student findStudent = studentRepository.findStudentById(studentId);
         if (findStudent == null){
             //TODO : 에러처리
