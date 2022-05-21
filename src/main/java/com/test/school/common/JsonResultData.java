@@ -8,21 +8,16 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 @Data
-@AllArgsConstructor
 @Builder
 public class JsonResultData<T> {
 
     private T data;
     private ApiExceptionEntity error;
-    private HttpStatus status;
-    private int code;
 
     @Builder(builderClassName = "ApiResultBuilder",builderMethodName = "ApiResultBuilder")
-    public JsonResultData(T data, ApiExceptionEntity error, HttpStatus status){
+    public JsonResultData(T data, ApiExceptionEntity error){
         this.data = data;
         this.error = error;
-        this.status = status;
-        this.code = status.value();
     }
 
 }

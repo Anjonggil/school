@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface StudentService {
 
-    List<StudentDto> getStudents();
-    Long setStudent(StudentDto studentDto);
+    List<StudentDto.Response> getStudents();
+    Long createStudents(StudentDto.Request studentDto);
     Boolean deleteStudent(Long id);
 }

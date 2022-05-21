@@ -5,8 +5,7 @@ import com.test.school.domain.dto.SubjectDto;
 import java.util.List;
 
 public interface SubjectService {
-    List<SubjectDto> getSubjects();
-    Long setSubject(SubjectDto subjectDto);
-
+    List<SubjectDto.Response> getSubjects();
+    Long createSubjects(SubjectDto.Request subjectDto);
     Boolean deleteSubject(Long subjectId);
 }

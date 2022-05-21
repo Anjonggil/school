@@ -30,10 +30,14 @@ public class Subject {
         this.name = name;
     }
 
-    public SubjectDto toDto(){
-        return SubjectDto.of()
+    public SubjectDto.Response toDto(){
+        return SubjectDto.Response.of()
                 .id(this.id)
                 .name(this.name)
                 .build();
+    }
+
+    public boolean validateData() {
+        return name.length() >= 1 && name.length() <= 16;
     }
 }

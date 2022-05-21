@@ -20,7 +20,7 @@ public class SubjectServiceImpl implements SubjectService {
     private final SubjectRepository subjectRepository;
 
     @Override
-    public List<SubjectDto> getSubjects(){
+    public List<SubjectDto.Response> getSubjects(){
         List<Subject> subjectList = subjectRepository.findByAll();
 
         return subjectList.stream().map(Subject::toDto).collect(Collectors.toList());
@@ -28,9 +28,13 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Transactional
     @Override
-    public Long setSubject(SubjectDto subjectDto) {
+    public Long createSubjects(SubjectDto.Request subjectDto) {
         validateDuplicateSubject(subjectDto.getName());
         Subject subject = subjectDto.toEntity();
+
+        if (!subject.validateData()){
+
+        }
 
         subjectRepository.save(subject);
         return subject.getId();
@@ -39,7 +43,9 @@ public class SubjectServiceImpl implements SubjectService {
     //과목 중복 체크
     private void validateDuplicateSubject(String name) {
         Subject findSubject = subjectRepository.findSubjectByName(name);
-        throw new ApiException(new ApiExceptionEntity("ALREADY_EXIST_SUBJECT", "이미 존재하는 과목입니다." +"["+findSubject.getName()+"]" ));
+        if (findSubject != null){
+            throw new ApiException(new ApiExceptionEntity("ALREADY_EXIST_SUBJECT", "이미 존재하는 과목입니다." +"["+findSubject.getName()+"]" ));
+        }
     }
 
     @Transactional

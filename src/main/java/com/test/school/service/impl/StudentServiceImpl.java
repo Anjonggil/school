@@ -26,7 +26,7 @@ public class StudentServiceImpl implements StudentService {
 
     //학생 조회
     @Override
-    public List<StudentDto> getStudents(){
+    public List<StudentDto.Response> getStudents(){
         List<Student> studentList = studentRepository.findByAll();
 
         return studentList.stream().map(Student::toDto).collect(Collectors.toList());
@@ -35,7 +35,7 @@ public class StudentServiceImpl implements StudentService {
     //학생 등록
     @Transactional
     @Override
-    public Long setStudent(StudentDto studentDto) {
+    public Long createStudents(StudentDto.Request studentDto) {
         validateDuplicateStudent(studentDto.getPhoneNumber());
 
         Student student = studentDto.toEntity();

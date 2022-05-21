@@ -1,5 +1,6 @@
 package com.test.school.domain;
 
+import com.test.school.domain.dto.ScoreDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,11 +10,11 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-@Table(name = "STUDENT_SUBJECT")
+@Table(name = "SCORE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StudentSubject {
+public class Score {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "student_subject_id")
+    @Column(name = "score_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,10 +28,23 @@ public class StudentSubject {
     private int score;
 
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public StudentSubject(Long id, Student student, Subject subject, int score) {
+    public Score(Long id, Student student, Subject subject, int score) {
         this.id = id;
         this.student = student;
         this.subject = subject;
         this.score = score;
+    }
+
+    @Builder(builderMethodName = "createStudentSubjectBuilder", builderClassName = "createStudentSubjectBuilder")
+    public static Score createStudentSubject(ScoreDto.Request scoreDto, Student student, Subject subject){
+        return Score.of()
+                .score(scoreDto.getScore())
+                .student(student)
+                .subject(subject)
+                .build();
+    }
+
+    public void changeScore(ScoreDto.Request scoreDto) {
+        this.score = scoreDto.getScore();
     }
 }

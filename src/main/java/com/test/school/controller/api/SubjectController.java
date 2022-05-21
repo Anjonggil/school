@@ -1,43 +1,49 @@
 package com.test.school.controller.api;
 
 import com.test.school.common.JsonResultData;
-import com.test.school.common.error.ApiExceptionEntity;
 import com.test.school.domain.dto.SubjectDto;
 import com.test.school.service.SubjectService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class SubjectController {
     private final SubjectService subjectService;
 
     @GetMapping("/subjects")
-    public JsonResultData<List<SubjectDto>> getSubjects(){
-        List<SubjectDto> subjectList = subjectService.getSubjects();
+    public JsonResultData<Map<String,List<SubjectDto.Response>>> getSubjects(){
+        List<SubjectDto.Response> subjectList = subjectService.getSubjects();
 
-        return JsonResultData.<List<SubjectDto>>ApiResultBuilder()
-                .data(subjectList)
+        Map<String,List<SubjectDto.Response>> result = new HashMap<>();
+        if (subjectList.size() > 0){
+            result.put("subjects",subjectList);
+        }else{
+            result = null;
+        }
+
+        return JsonResultData.<Map<String,List<SubjectDto.Response>>>ApiResultBuilder()
+                .data(result)
                 .error(null)
-                .status(HttpStatus.OK)
                 .build();
     }
 
     @PostMapping("/subjects")
-    public JsonResultData<?> setSubject(@RequestBody SubjectDto subjectDto){
-        Long id = subjectService.setSubject(subjectDto);
+    public JsonResultData<?> createSubjects(@RequestBody SubjectDto subjectDto){
+        Long id = subjectService.createSubjects(subjectDto.getRequest());
         if (id != null){
             return JsonResultData.ApiResultBuilder()
                     .data(null)
                     .error(null)
-                    .status(HttpStatus.CREATED)
                     .build();
         }else{
             return JsonResultData.ApiResultBuilder()
-                    .status(HttpStatus.BAD_REQUEST)
                     .build();
         }
     }
@@ -49,11 +55,9 @@ public class SubjectController {
         Boolean isDeleted = subjectService.deleteSubject(subjectId);
         if (isDeleted){
             return JsonResultData.ApiResultBuilder()
-                    .status(HttpStatus.NO_CONTENT)
                     .build();
         }else{
             return JsonResultData.ApiResultBuilder()
-                    .status(HttpStatus.BAD_REQUEST)
                     .build();
         }
     }

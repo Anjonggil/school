@@ -38,8 +38,8 @@ public class Student {
         this.phoneNumber = phoneNumber;
     }
 
-    public StudentDto toDto(){
-        return StudentDto.builder()
+    public StudentDto.Response toDto(){
+        return StudentDto.Response.of()
                 .name(this.name)
                 .age(this.age)
                 .schoolType(this.schoolType)
