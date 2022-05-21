@@ -12,7 +12,7 @@ import java.util.List;
 public interface StudentRepository extends CrudRepository<Student,Long> {
     Student findStudentById(Long id);
 
-    @Query("select s from Student s")
+    @Query(value = "select s from Student s")
     List<Student> findByAll();
 
     Student findStudentByPhoneNumber(String phoneNumber);

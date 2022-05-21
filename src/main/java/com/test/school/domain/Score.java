@@ -1,6 +1,8 @@
 package com.test.school.domain;
 
 import com.test.school.domain.dto.ScoreDto;
+import com.test.school.domain.response.ScoreStudentResponse;
+import com.test.school.domain.request.ScoreSubjectResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,5 +48,21 @@ public class Score {
 
     public void changeScore(ScoreDto.Request scoreDto) {
         this.score = scoreDto.getScore();
+    }
+
+    public ScoreSubjectResponse.Info toSubjectInfo(){
+        return ScoreSubjectResponse.Info.builder()
+                .id(subject.getId())
+                .name(subject.getName())
+                .score(score)
+                .build();
+    }
+
+    public ScoreStudentResponse.Info toStudentInfo(){
+        return ScoreStudentResponse.Info.builder()
+                .id(student.getId())
+                .name(student.getName())
+                .score(score)
+                .build();
     }
 }

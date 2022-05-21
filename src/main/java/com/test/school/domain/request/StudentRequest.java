@@ -1,4 +1,4 @@
-package com.test.school.domain.dto;
+package com.test.school.domain.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.test.school.domain.SchoolType;
@@ -7,13 +7,13 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class StudentDto {
+public class StudentRequest {
 
     @JsonProperty("student")
-    private Request request;
+    private Info info;
 
     @Getter
-    public static class Request{
+    public static class Info {
         private String name;
         private int age;
         private SchoolType schoolType;
@@ -26,22 +26,6 @@ public class StudentDto {
                     .schoolType(this.schoolType)
                     .phoneNumber(this.phoneNumber)
                     .build();
-        }
-    }
-
-    @Getter
-    public static class Response{
-        private String name;
-        private int age;
-        private SchoolType schoolType;
-        private String phoneNumber;
-
-        @Builder(builderMethodName = "of",builderClassName = "of")
-        public Response(String name, int age, SchoolType schoolType, String phoneNumber) {
-            this.name = name;
-            this.age = age;
-            this.schoolType = schoolType;
-            this.phoneNumber = phoneNumber;
         }
     }
 }

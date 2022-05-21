@@ -1,15 +1,14 @@
 package com.test.school.controller.api;
 
 import com.test.school.common.JsonResultData;
-import com.test.school.domain.dto.StudentDto;
+import com.test.school.domain.request.StudentRequest;
+import com.test.school.domain.response.StudentResponse;
 import com.test.school.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -18,48 +17,46 @@ public class StudentController {
     private final StudentService studentService;
 
     @GetMapping("/students")
-    public JsonResultData<Map<String,List<StudentDto.Response>>> getStudents(){
-        List<StudentDto.Response> studentDtoList = studentService.getStudents();
+    public ResponseEntity<JsonResultData<StudentResponse>> getStudents(){
+        StudentResponse studentDtoList = studentService.getStudents();
 
-        Map<String,List<StudentDto.Response>> result = new HashMap<>();
-        if (studentDtoList.size() > 0){
-            result.put("student",studentDtoList);
-        }else{
-            result = null;
-        }
-
-        return JsonResultData.<Map<String,List<StudentDto.Response>>>ApiResultBuilder()
-                .data(result)
-                .error(null)
-                .build();
+        return new ResponseEntity<>(
+                JsonResultData.<StudentResponse>ApiResultBuilder()
+                    .data(studentDtoList)
+                    .error(null)
+                    .build(),
+                HttpStatus.OK);
     }
 
     @PostMapping("/students")
-    public JsonResultData<?> createStudents(@RequestBody StudentDto student){
-        Long id = studentService.createStudents(student.getRequest());
+    public ResponseEntity<?> createStudents(@RequestBody StudentRequest student){
+        Long id = studentService.createStudents(student.getInfo());
         if (id != null){
-            return JsonResultData.ApiResultBuilder()
+            return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
                     .data(null)
                     .error(null)
-                    .build();
+                    .build(),HttpStatus.CREATED);
         }else{
-            return JsonResultData.ApiResultBuilder()
-                    .build();
+            return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
+                    .data(null)
+                    .error(null)
+                    .build(),HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/students/{studentId}")
-    public JsonResultData<?> deleteStudent(
+    public ResponseEntity<?> deleteStudent(
             @PathVariable("studentId") Long id
     ){
         Boolean isDeleted = studentService.deleteStudent(id);
 
         if (isDeleted){
-            return JsonResultData.ApiResultBuilder()
-                    .build();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }else{
-            return JsonResultData.ApiResultBuilder()
-                    .build();
+            return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
+                    .data(null)
+                    .error(null)
+                    .build(),HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -3,7 +3,8 @@ package com.test.school.service.impl;
 import com.test.school.common.error.ApiException;
 import com.test.school.common.error.ApiExceptionEntity;
 import com.test.school.domain.Subject;
-import com.test.school.domain.dto.SubjectDto;
+import com.test.school.domain.request.SubjectRequest;
+import com.test.school.domain.response.SubjectResponse;
 import com.test.school.repository.SubjectRepository;
 import com.test.school.service.SubjectService;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +21,15 @@ public class SubjectServiceImpl implements SubjectService {
     private final SubjectRepository subjectRepository;
 
     @Override
-    public List<SubjectDto.Response> getSubjects(){
+    public SubjectResponse getSubjects(){
         List<Subject> subjectList = subjectRepository.findByAll();
 
-        return subjectList.stream().map(Subject::toDto).collect(Collectors.toList());
+        return SubjectResponse.createStudentResponse(subjectList);
     }
 
     @Transactional
     @Override
-    public Long createSubjects(SubjectDto.Request subjectDto) {
+    public Long createSubjects(SubjectRequest.Info subjectDto) {
         validateDuplicateSubject(subjectDto.getName());
         Subject subject = subjectDto.toEntity();
 

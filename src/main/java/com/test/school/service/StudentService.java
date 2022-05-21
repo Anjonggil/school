@@ -1,13 +1,14 @@
 package com.test.school.service;
 
-import com.test.school.domain.Student;
-import com.test.school.domain.dto.StudentDto;
+import com.test.school.domain.request.StudentRequest;
+import com.test.school.domain.response.StudentResponse;
 
 import java.util.List;
 
 public interface StudentService {
+    StudentResponse getStudents();
 
-    List<StudentDto.Response> getStudents();
-    Long createStudents(StudentDto.Request studentDto);
+    Long createStudents(StudentRequest.Info studentDto);
+
     Boolean deleteStudent(Long id);
 }

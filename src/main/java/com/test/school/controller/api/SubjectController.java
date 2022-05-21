@@ -1,10 +1,13 @@
 package com.test.school.controller.api;
 
 import com.test.school.common.JsonResultData;
-import com.test.school.domain.dto.SubjectDto;
+import com.test.school.domain.request.SubjectRequest;
+import com.test.school.domain.response.SubjectResponse;
 import com.test.school.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -18,47 +21,45 @@ public class SubjectController {
     private final SubjectService subjectService;
 
     @GetMapping("/subjects")
-    public JsonResultData<Map<String,List<SubjectDto.Response>>> getSubjects(){
-        List<SubjectDto.Response> subjectList = subjectService.getSubjects();
+    public ResponseEntity<JsonResultData<SubjectResponse>> getSubjects(){
+        SubjectResponse subjectResponse = subjectService.getSubjects();
 
-        Map<String,List<SubjectDto.Response>> result = new HashMap<>();
-        if (subjectList.size() > 0){
-            result.put("subjects",subjectList);
-        }else{
-            result = null;
-        }
-
-        return JsonResultData.<Map<String,List<SubjectDto.Response>>>ApiResultBuilder()
-                .data(result)
-                .error(null)
-                .build();
+        return new ResponseEntity<>(
+                JsonResultData.<SubjectResponse>ApiResultBuilder()
+                    .data(subjectResponse)
+                    .error(null)
+                    .build(),
+                HttpStatus.OK);
     }
 
     @PostMapping("/subjects")
-    public JsonResultData<?> createSubjects(@RequestBody SubjectDto subjectDto){
-        Long id = subjectService.createSubjects(subjectDto.getRequest());
+    public ResponseEntity<?> createSubjects(@RequestBody SubjectRequest subjectRequest){
+        Long id = subjectService.createSubjects(subjectRequest.getInfo());
         if (id != null){
-            return JsonResultData.ApiResultBuilder()
+            return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
                     .data(null)
                     .error(null)
-                    .build();
+                    .build(),HttpStatus.CREATED);
         }else{
-            return JsonResultData.ApiResultBuilder()
-                    .build();
+            return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
+                    .data(null)
+                    .error(null)
+                    .build(),HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/subjects/{subjectId}")
-    public JsonResultData<?> deleteSubject(
+    public ResponseEntity<?> deleteSubject(
             @PathVariable("subjectId")Long subjectId
     ){
         Boolean isDeleted = subjectService.deleteSubject(subjectId);
         if (isDeleted){
-            return JsonResultData.ApiResultBuilder()
-                    .build();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }else{
-            return JsonResultData.ApiResultBuilder()
-                    .build();
+            return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
+                    .data(null)
+                    .error(null)
+                    .build(),HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -3,16 +3,17 @@ package com.test.school.service.impl;
 import com.test.school.common.error.ApiException;
 import com.test.school.common.error.ApiExceptionEntity;
 import com.test.school.common.error.ExceptionEnum;
+import com.test.school.domain.Score;
 import com.test.school.domain.Student;
-import com.test.school.domain.dto.StudentDto;
+import com.test.school.domain.request.StudentRequest;
+import com.test.school.domain.response.StudentResponse;
+import com.test.school.repository.ScoreRepository;
 import com.test.school.repository.StudentRepository;
 import com.test.school.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,19 +24,20 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
+    private final ScoreRepository scoreRepository;
 
     //학생 조회
     @Override
-    public List<StudentDto.Response> getStudents(){
+    public StudentResponse getStudents(){
         List<Student> studentList = studentRepository.findByAll();
 
-        return studentList.stream().map(Student::toDto).collect(Collectors.toList());
+        return StudentResponse.createStudentResponse(studentList);
     }
 
     //학생 등록
     @Transactional
     @Override
-    public Long createStudents(StudentDto.Request studentDto) {
+    public Long createStudents(StudentRequest.Info studentDto) {
         validateDuplicateStudent(studentDto.getPhoneNumber());
 
         Student student = studentDto.toEntity();
@@ -64,6 +66,11 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findStudentById(id);
         if (student == null){
             return false;
+        }
+
+        List<Score> scoreList = scoreRepository.findScoresByStudentId(student.getId());
+        if (scoreList.size() > 0){
+            scoreRepository.deleteAll(scoreList);
         }
 
         studentRepository.delete(student);

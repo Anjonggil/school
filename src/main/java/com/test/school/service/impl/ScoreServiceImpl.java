@@ -4,6 +4,8 @@ import com.test.school.domain.Student;
 import com.test.school.domain.Score;
 import com.test.school.domain.Subject;
 import com.test.school.domain.dto.ScoreDto;
+import com.test.school.domain.response.ScoreStudentResponse;
+import com.test.school.domain.request.ScoreSubjectResponse;
 import com.test.school.repository.ScoreRepository;
 import com.test.school.repository.StudentRepository;
 import com.test.school.repository.SubjectRepository;
@@ -11,6 +13,8 @@ import com.test.school.service.ScoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -77,5 +81,27 @@ public class ScoreServiceImpl implements ScoreService {
         }else{
             return false;
         }
+    }
+
+    @Override
+    public ScoreSubjectResponse getAverageScoreByStudent(Long studentId) {
+        Student findStudent = studentRepository.findStudentById(studentId);
+        if (findStudent == null){
+            //TODO : 에러처리
+        }
+
+        List<Score> scoreList = scoreRepository.findScoresByStudentId(findStudent.getId());
+        return ScoreSubjectResponse.createSubjectsResponse(scoreList);
+    }
+
+    @Override
+    public ScoreStudentResponse getAverageScoreBySubject(Long subjectId) {
+        Subject findSubject = subjectRepository.findSubjectById(subjectId);
+        if (findSubject == null){
+            //TODO : 에러처리
+        }
+
+        List<Score> scoreList = scoreRepository.findScoresBySubjectId(findSubject.getId());
+        return ScoreStudentResponse.createStudentsResponse(scoreList);
     }
 }

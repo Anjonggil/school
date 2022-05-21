@@ -1,14 +1,13 @@
 package com.test.school.domain;
 
-import com.test.school.domain.dto.SubjectDto;
+import com.test.school.domain.request.SubjectRequest;
+import com.test.school.domain.response.SubjectResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -30,8 +29,8 @@ public class Subject {
         this.name = name;
     }
 
-    public SubjectDto.Response toDto(){
-        return SubjectDto.Response.of()
+    public SubjectResponse.Info toDto(){
+        return SubjectResponse.Info.of()
                 .id(this.id)
                 .name(this.name)
                 .build();

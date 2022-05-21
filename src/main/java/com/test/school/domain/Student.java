@@ -1,12 +1,10 @@
 package com.test.school.domain;
 
-import com.test.school.domain.dto.StudentDto;
+import com.test.school.domain.request.StudentRequest;
+import com.test.school.domain.response.StudentResponse;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,8 +36,8 @@ public class Student {
         this.phoneNumber = phoneNumber;
     }
 
-    public StudentDto.Response toDto(){
-        return StudentDto.Response.of()
+    public StudentResponse.Info toDto(){
+        return StudentResponse.Info.of()
                 .name(this.name)
                 .age(this.age)
                 .schoolType(this.schoolType)
