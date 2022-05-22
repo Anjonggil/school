@@ -12,7 +12,7 @@ public class SchoolTypeValidator implements ConstraintValidator <Type, SchoolTyp
 
     @Override
     public boolean isValid(SchoolType value, ConstraintValidatorContext context) {
-        if (value.getCode() == null){
+        if (value == null){
             return false;
         }
 

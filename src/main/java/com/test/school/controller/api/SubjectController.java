@@ -4,6 +4,8 @@ import com.test.school.common.JsonResultData;
 import com.test.school.domain.request.SubjectRequest;
 import com.test.school.domain.response.SubjectResponse;
 import com.test.school.service.SubjectService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import java.util.Map;
 public class SubjectController {
     private final SubjectService subjectService;
 
+    @Operation(summary = "과목 조회 API", description = "과목 조회 API")
     @GetMapping("/subjects")
     public ResponseEntity<JsonResultData<SubjectResponse>> getSubjects(){
         SubjectResponse subjectResponse = subjectService.getSubjects();
@@ -33,8 +36,12 @@ public class SubjectController {
                 HttpStatus.OK);
     }
 
+    @Operation(summary = "과목 등록 API", description = "과목 등록 API")
     @PostMapping("/subjects")
-    public ResponseEntity<?> createSubjects(@RequestBody @Valid SubjectRequest subjectRequest){
+    public ResponseEntity<?> createSubjects(
+            @Parameter(description = "Subject Request", required = true)
+            @RequestBody @Valid SubjectRequest subjectRequest
+    ){
         Long id = subjectService.createSubjects(subjectRequest.getInfo());
         if (id != null){
             return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
@@ -49,8 +56,10 @@ public class SubjectController {
         }
     }
 
+    @Operation(summary = "과목 삭제 API", description = "과목 삭제 API")
     @DeleteMapping("/subjects/{subjectId}")
     public ResponseEntity<?> deleteSubject(
+            @Parameter(description = "Subject Id", required = true)
             @PathVariable("subjectId")Long subjectId
     ){
         Boolean isDeleted = subjectService.deleteSubject(subjectId);

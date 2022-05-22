@@ -1,5 +1,6 @@
 package com.test.school.common.error;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 public class ApiExceptionEntity<T> {
     private T data;
+    @JsonProperty("error")
     private ErrorInfo errorInfo;
 
     @Builder

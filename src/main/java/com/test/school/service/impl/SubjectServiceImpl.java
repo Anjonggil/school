@@ -57,7 +57,10 @@ public class SubjectServiceImpl implements SubjectService {
         Subject subject = subjectRepository.findSubjectById(subjectId);
 
         if (subject == null){
-            return false;
+            throw new BadRequestApiException(ApiExceptionEntity.builder()
+                    .errorCode(ErrorCode.SUBJECT_NOT_FOUND.getCode())
+                    .errorMessage("과목을 찾을 수 없습니다." + " [" + subjectId + "]")
+                    .build());
         }
 
         List<Score> scoreList = scoreRepository.findScoresBySubjectId(subject.getId());

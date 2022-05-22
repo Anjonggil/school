@@ -4,6 +4,8 @@ import com.test.school.common.JsonResultData;
 import com.test.school.domain.request.StudentRequest;
 import com.test.school.domain.response.StudentResponse;
 import com.test.school.service.StudentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import java.util.regex.Pattern;
 public class StudentController {
     private final StudentService studentService;
 
+    @Operation(summary = "회원 조회 API", description = "회원 조회 API")
     @GetMapping("/students")
     public ResponseEntity<JsonResultData<StudentResponse>> getStudents(){
         StudentResponse studentDtoList = studentService.getStudents();
@@ -31,8 +34,12 @@ public class StudentController {
                 HttpStatus.OK);
     }
 
+    @Operation(summary = "회원 등록 API", description = "회원 등록 API")
     @PostMapping("/students")
-    public ResponseEntity<?> createStudents(@RequestBody @Valid StudentRequest student){
+    public ResponseEntity<?> createStudents(
+            @Parameter(description = "Student Request", required = true)
+            @RequestBody @Valid StudentRequest student
+    ){
         Long id = studentService.createStudents(student.getInfo());
         if (id != null){
             return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
@@ -47,8 +54,10 @@ public class StudentController {
         }
     }
 
+    @Operation(summary = "회원 삭제 API", description = "회원 삭제 API")
     @DeleteMapping("/students/{studentId}")
     public ResponseEntity<?> deleteStudent(
+            @Parameter(description = "Student Id", required = true)
             @PathVariable("studentId") Long id
     ){
         Boolean isDeleted = studentService.deleteStudent(id);

@@ -63,7 +63,10 @@ public class StudentServiceImpl implements StudentService {
     public Boolean deleteStudent(Long id) {
         Student student = studentRepository.findStudentById(id);
         if (student == null){
-            return false;
+            throw new BadRequestApiException(ApiExceptionEntity.builder()
+                    .errorCode(ErrorCode.STUDENT_NOT_FOUND.getCode())
+                    .errorMessage("학생을 찾을 수 없습니다." + " [" + id + "]")
+                    .build());
         }
 
         List<Score> scoreList = scoreRepository.findScoresByStudentId(student.getId());

@@ -6,6 +6,8 @@ import com.test.school.domain.request.ScoreRequest;
 import com.test.school.domain.response.ScoreStudentResponse;
 import com.test.school.domain.response.ScoreSubjectResponse;
 import com.test.school.service.ScoreService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,11 +22,12 @@ import javax.validation.Valid;
 public class ScoreController {
     private final ScoreService scoreService;
 
+    @Operation(summary = "점수 등록 API", description = "점수 등록 API")
     @PostMapping("/students/{studentId}/subjects/{subjectId}/scores")
     public ResponseEntity<?> createScores(
-            @PathVariable("studentId") Long studentId,
-            @PathVariable("subjectId") Long subjectId,
-            @RequestBody @Valid ScoreRequest.Info scoreRequest){
+            @Parameter(description = "Student Id", required = true) @PathVariable("studentId") Long studentId,
+            @Parameter(description = "Subject Id", required = true) @PathVariable("subjectId") Long subjectId,
+            @Parameter(description = "Score Request", required = true) @RequestBody @Valid ScoreRequest.Info scoreRequest){
 
         Long id = scoreService.createScores(scoreRequest, studentId, subjectId);
         if (id != null){
@@ -38,11 +41,12 @@ public class ScoreController {
         }
     }
 
+    @Operation(summary = "점수 수정 API", description = "점수 수정 API")
     @PutMapping("/students/{studentId}/subjects/{subjectId}/scores")
     public ResponseEntity<?> updateScores(
-            @PathVariable("studentId") Long studentId,
-            @PathVariable("subjectId") Long subjectId,
-            @RequestBody @Valid ScoreRequest.Info scoreRequest){
+            @Parameter(description = "Student Id", required = true) @PathVariable("studentId") Long studentId,
+            @Parameter(description = "Subject Id", required = true) @PathVariable("subjectId") Long subjectId,
+            @Parameter(description = "Score Request", required = true) @RequestBody @Valid ScoreRequest.Info scoreRequest){
         Score score = scoreService.updateScores(scoreRequest,studentId,subjectId);
         if (score != null && score.getScore() == scoreRequest.getScore()){
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
@@ -51,10 +55,11 @@ public class ScoreController {
         }
     }
 
+    @Operation(summary = "점수 삭제 API", description = "점수 삭제 API")
     @DeleteMapping("/students/{studentId}/subjects/{subjectId}/scores")
     public ResponseEntity<?> deleteScores(
-            @PathVariable("studentId") Long studentId,
-            @PathVariable("subjectId") Long subjectId){
+            @Parameter(description = "Student Id", required = true) @PathVariable("studentId") Long studentId,
+            @Parameter(description = "Subject Id", required = true) @PathVariable("subjectId") Long subjectId){
         Boolean isDelete = scoreService.deleteScore(studentId,subjectId);
         if (isDelete){
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
@@ -63,9 +68,10 @@ public class ScoreController {
         }
     }
 
+    @Operation(summary = "회원 평균 점수 API", description = "회원 평균 점수 API")
     @GetMapping("/students/{studentId}/average-score")
     public ResponseEntity<?> getAverageScoreByStudent(
-            @PathVariable("studentId") Long studentId){
+            @Parameter(description = "Student Id", required = true) @PathVariable("studentId") Long studentId){
         ScoreSubjectResponse scoreSubjectResponse = scoreService.getAverageScoreByStudent(studentId);
         return new ResponseEntity<>(
                 JsonResultData.ApiResultBuilder()
@@ -75,9 +81,10 @@ public class ScoreController {
                 HttpStatus.OK);
     }
 
+    @Operation(summary = "과목 평균 점수 API", description = "과목 평균 점수 API")
     @GetMapping("/subjects/{subjectId}/average-score")
     public ResponseEntity<?> getAverageScoreBySubject(
-            @PathVariable("subjectId") Long subjectId){
+            @Parameter(description = "Subject Id", required = true) @PathVariable("subjectId") Long subjectId){
         ScoreStudentResponse scoreSubjectResponse = scoreService.getAverageScoreBySubject(subjectId);
         return new ResponseEntity<>(
                 JsonResultData.ApiResultBuilder()
