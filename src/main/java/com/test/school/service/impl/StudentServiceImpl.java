@@ -1,7 +1,7 @@
 package com.test.school.service.impl;
 
-import com.test.school.common.error.BadRequestApiException;
 import com.test.school.common.error.ApiExceptionEntity;
+import com.test.school.common.error.BadRequestApiException;
 import com.test.school.common.error.ErrorCode;
 import com.test.school.domain.Score;
 import com.test.school.domain.Student;
@@ -73,16 +73,5 @@ public class StudentServiceImpl implements StudentService {
 
         studentRepository.delete(student);
         return true;
-    }
-
-    public Student getStudent(Long studentId) {
-        Student findStudent = studentRepository.findStudentById(studentId);
-        if (findStudent == null) {
-            throw new BadRequestApiException(ApiExceptionEntity.builder()
-                    .errorCode(ErrorCode.STUDENT_NOT_FOUND.getCode())
-                    .errorMessage("학생을 찾을 수 없습니다." + " [" + studentId + "]")
-                    .build());
-        }
-        return findStudent;
     }
 }

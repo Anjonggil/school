@@ -3,9 +3,11 @@ package com.test.school.service.impl;
 import com.test.school.common.error.BadRequestApiException;
 import com.test.school.common.error.ApiExceptionEntity;
 import com.test.school.common.error.ErrorCode;
+import com.test.school.domain.Score;
 import com.test.school.domain.Subject;
 import com.test.school.domain.request.SubjectRequest;
 import com.test.school.domain.response.SubjectResponse;
+import com.test.school.repository.ScoreRepository;
 import com.test.school.repository.SubjectRepository;
 import com.test.school.service.SubjectService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubjectServiceImpl implements SubjectService {
     private final SubjectRepository subjectRepository;
+    private final ScoreRepository scoreRepository;
 
     @Override
     public SubjectResponse getSubjects(){
@@ -57,18 +60,12 @@ public class SubjectServiceImpl implements SubjectService {
             return false;
         }
 
+        List<Score> scoreList = scoreRepository.findScoresBySubjectId(subject.getId());
+        if (scoreList.size() > 0){
+            scoreRepository.deleteAll(scoreList);
+        }
+
         subjectRepository.delete(subject);
         return true;
-    }
-
-    public Subject getSubject(Long subjectId) {
-        Subject findSubject = subjectRepository.findSubjectById(subjectId);
-        if (findSubject == null) {
-            throw new BadRequestApiException(ApiExceptionEntity.builder()
-                    .errorCode(ErrorCode.SUBJECT_NOT_FOUND.getCode())
-                    .errorMessage("과목을 찾을 수 없습니다." + " [" + subjectId + "]")
-                    .build());
-        }
-        return findSubject;
     }
 }

@@ -10,6 +10,8 @@ import com.test.school.domain.request.ScoreRequest;
 import com.test.school.domain.response.ScoreStudentResponse;
 import com.test.school.domain.response.ScoreSubjectResponse;
 import com.test.school.repository.ScoreRepository;
+import com.test.school.repository.StudentRepository;
+import com.test.school.repository.SubjectRepository;
 import com.test.school.service.ScoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,14 +24,14 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ScoreServiceImpl implements ScoreService {
     private final ScoreRepository scoreRepository;
-    private final StudentServiceImpl studentService;
-    private final SubjectServiceImpl subjectService;
+    private final SubjectRepository subjectRepository;
+    private final StudentRepository studentRepository;
 
     @Override
     @Transactional
     public Long createScores(ScoreRequest.Info scoreDto, Long studentId, Long subjectId) {
-        Student findStudent = studentService.getStudent(studentId);
-        Subject findSubject = subjectService.getSubject(subjectId);
+        Student findStudent = getStudent(studentId);
+        Subject findSubject = getSubject(subjectId);
 
         Score score = Score.createStudentSubjectBuilder()
                 .scoreDto(scoreDto)
@@ -44,8 +46,8 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     @Transactional
     public Score updateScores(ScoreRequest.Info scoreDto, Long studentId, Long subjectId) {
-        Student findStudent = studentService.getStudent(studentId);
-        Subject findSubject = subjectService.getSubject(subjectId);
+        Student findStudent = getStudent(studentId);
+        Subject findSubject = getSubject(subjectId);
 
         Score findScore = scoreRepository.findScoreByStudentAndSubject(findStudent, findSubject);
         if (findScore != null) findScore.changeScore(scoreDto);
@@ -54,9 +56,10 @@ public class ScoreServiceImpl implements ScoreService {
     }
 
     @Override
+    @Transactional
     public Boolean deleteScore(Long studentId, Long subjectId) {
-        Student findStudent = studentService.getStudent(studentId);
-        Subject findSubject = subjectService.getSubject(subjectId);
+        Student findStudent = getStudent(studentId);
+        Subject findSubject = getSubject(subjectId);
 
         Score findScore = scoreRepository.findScoreByStudentAndSubject(findStudent, findSubject);
         if (findScore != null) {
@@ -69,7 +72,7 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     public ScoreSubjectResponse getAverageScoreByStudent(Long studentId) {
-        Student findStudent = studentService.getStudent(studentId);
+        Student findStudent = getStudent(studentId);
         List<Score> scoreList = scoreRepository.findScoresByStudentId(findStudent.getId());
 
         return ScoreSubjectResponse.createSubjectsResponse(scoreList);
@@ -77,9 +80,33 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     public ScoreStudentResponse getAverageScoreBySubject(Long subjectId) {
-        Subject findSubject = subjectService.getSubject(subjectId);
+        Subject findSubject = getSubject(subjectId);
         List<Score> scoreList = scoreRepository.findScoresBySubjectId(findSubject.getId());
 
         return ScoreStudentResponse.createStudentsResponse(scoreList);
     }
+
+    private Subject getSubject(Long subjectId){
+        Subject findSubject = subjectRepository.findSubjectById(subjectId);
+        if (findSubject == null) {
+            throw new BadRequestApiException(ApiExceptionEntity.builder()
+                    .errorCode(ErrorCode.SUBJECT_NOT_FOUND.getCode())
+                    .errorMessage("과목을 찾을 수 없습니다." + " [" + subjectId + "]")
+                    .build());
+        }
+        return findSubject;
+    }
+
+
+    private Student getStudent(Long studentId) {
+        Student findStudent = studentRepository.findStudentById(studentId);
+        if (findStudent == null) {
+            throw new BadRequestApiException(ApiExceptionEntity.builder()
+                    .errorCode(ErrorCode.STUDENT_NOT_FOUND.getCode())
+                    .errorMessage("학생을 찾을 수 없습니다." + " [" + studentId + "]")
+                    .build());
+        }
+        return findStudent;
+    }
+
 }
