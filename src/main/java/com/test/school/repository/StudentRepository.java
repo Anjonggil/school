@@ -1,6 +1,6 @@
 package com.test.school.repository;
 
-import com.test.school.domain.Student;
+import com.test.school.domain.entity.Student;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

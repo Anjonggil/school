@@ -5,7 +5,7 @@ import com.test.school.common.annotation.Name;
 import com.test.school.common.annotation.Tel;
 import com.test.school.common.annotation.Type;
 import com.test.school.domain.SchoolType;
-import com.test.school.domain.Student;
+import com.test.school.domain.entity.Student;
 import lombok.Getter;
 
 import javax.validation.Valid;

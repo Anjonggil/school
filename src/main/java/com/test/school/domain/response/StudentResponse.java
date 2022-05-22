@@ -1,7 +1,7 @@
 package com.test.school.domain.response;
 
 import com.test.school.domain.SchoolType;
-import com.test.school.domain.Student;
+import com.test.school.domain.entity.Student;
 import lombok.Builder;
 import lombok.Getter;
 

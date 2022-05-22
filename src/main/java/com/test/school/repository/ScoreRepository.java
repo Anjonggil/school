@@ -1,8 +1,8 @@
 package com.test.school.repository;
 
-import com.test.school.domain.Score;
-import com.test.school.domain.Student;
-import com.test.school.domain.Subject;
+import com.test.school.domain.entity.Score;
+import com.test.school.domain.entity.Student;
+import com.test.school.domain.entity.Subject;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

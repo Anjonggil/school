@@ -1,7 +1,7 @@
 package com.test.school.controller.api;
 
 import com.test.school.common.JsonResultData;
-import com.test.school.domain.Score;
+import com.test.school.domain.entity.Score;
 import com.test.school.domain.request.ScoreRequest;
 import com.test.school.domain.response.ScoreStudentResponse;
 import com.test.school.domain.response.ScoreSubjectResponse;

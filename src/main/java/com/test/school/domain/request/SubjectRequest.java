@@ -2,8 +2,7 @@ package com.test.school.domain.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.test.school.common.annotation.Name;
-import com.test.school.domain.Subject;
-import lombok.Builder;
+import com.test.school.domain.entity.Subject;
 import lombok.Getter;
 
 import javax.validation.Valid;

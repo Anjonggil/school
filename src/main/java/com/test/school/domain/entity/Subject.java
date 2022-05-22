@@ -1,4 +1,4 @@
-package com.test.school.domain;
+package com.test.school.domain.entity;
 
 import com.test.school.domain.request.SubjectRequest;
 import com.test.school.domain.response.SubjectResponse;

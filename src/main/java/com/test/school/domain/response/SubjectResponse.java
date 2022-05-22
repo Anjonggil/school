@@ -1,6 +1,6 @@
 package com.test.school.domain.response;
 
-import com.test.school.domain.Subject;
+import com.test.school.domain.entity.Subject;
 import lombok.Builder;
 import lombok.Getter;
 

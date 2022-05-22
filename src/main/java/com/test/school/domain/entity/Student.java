@@ -1,5 +1,6 @@
-package com.test.school.domain;
+package com.test.school.domain.entity;
 
+import com.test.school.domain.SchoolType;
 import com.test.school.domain.request.StudentRequest;
 import com.test.school.domain.response.StudentResponse;
 import lombok.*;
