@@ -74,7 +74,7 @@ __참고__
 ## ERD
 ![image](https://user-images.githubusercontent.com/42487599/169690068-76033fbc-bb5b-4528-a1ec-7aea4b7844a0.png)
 
-####table.STUDENT 
+#### table.STUDENT 
 
 | Column | type | constraint | description |
 |:--------|:--------:|:--------:|:--------:|
@@ -84,7 +84,7 @@ __참고__
 | phone_number|varchar(15)|unique,notnull|전화번호|
 | school_type|varchar(10)|notnull|학교급|
 
-####table.SUBJECT 
+#### table.SUBJECT 
 
 | Column | type | constraint | description |
 |:--------|:--------:|:--------:|:--------:|
@@ -92,7 +92,7 @@ __참고__
 | subject_name|varchar(50)|unique,notnull|과목이름|
 
 
-####table.SCORE 
+#### table.SCORE 
 
 | Column | type | constraint | description |
 |:--------|:--------:|:--------:|:--------:|
