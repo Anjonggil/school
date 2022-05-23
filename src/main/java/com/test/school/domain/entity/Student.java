@@ -6,6 +6,8 @@ import com.test.school.domain.response.StudentResponse;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,8 +34,8 @@ public class Student {
     @Column(name = "phone_number",length = 15)
     private String phoneNumber;
 
-//    @OneToMany(mappedBy = "student")
-//    private List<StudentSubject> studentSubjectList = new ArrayList<>();
+    @OneToMany(mappedBy = "student")
+    private List<Score> scoreList = new ArrayList<>();
 
     @Builder(builderMethodName = "of",builderClassName = "of")
     public Student(Long id, String name, int age, SchoolType schoolType, String phoneNumber) {
@@ -51,5 +53,11 @@ public class Student {
                 .schoolType(this.schoolType)
                 .phoneNumber(this.phoneNumber)
                 .build();
+    }
+
+    public double getAverage() {
+        double averageScore = -1d;
+        if (this.scoreList.size() > 0) averageScore = this.scoreList.stream().mapToDouble(Score::getScore).average().orElse(0.0);
+        return averageScore;
     }
 }

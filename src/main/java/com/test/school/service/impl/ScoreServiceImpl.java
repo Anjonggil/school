@@ -73,17 +73,23 @@ public class ScoreServiceImpl implements ScoreService {
     @Override
     public ScoreSubjectResponse getAverageScoreByStudent(Long studentId) {
         Student findStudent = getStudent(studentId);
-        List<Score> scoreList = scoreRepository.findScoresByStudentId(findStudent.getId());
+        double averageScore = findStudent.getAverage();
 
-        return ScoreSubjectResponse.createSubjectsResponse(scoreList);
+        return ScoreSubjectResponse.createSubjectsResponseBuilder()
+                .scoreList(findStudent.getScoreList())
+                .averageScore(averageScore)
+                .build();
     }
 
     @Override
     public ScoreStudentResponse getAverageScoreBySubject(Long subjectId) {
         Subject findSubject = getSubject(subjectId);
-        List<Score> scoreList = scoreRepository.findScoresBySubjectId(findSubject.getId());
+        double averageScore = findSubject.getAverage();
 
-        return ScoreStudentResponse.createStudentsResponse(scoreList);
+        return ScoreStudentResponse.createStudentsResponseBuilder()
+                .scoreList(findSubject.getScoreList())
+                .averageScore(averageScore)
+                .build();
     }
 
     private Subject getSubject(Long subjectId){

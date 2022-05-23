@@ -31,20 +31,11 @@ public class ScoreSubjectResponse {
     }
 
     @Builder(builderMethodName = "createSubjectsResponseBuilder",builderClassName = "createSubjectsResponseBuilder")
-    public static ScoreSubjectResponse createSubjectsResponse(List<Score> scoreList){
-        double averageScore = -1d;
-        averageScore = getAverageScore(scoreList, averageScore);
+    public static ScoreSubjectResponse createSubjectsResponse(List<Score> scoreList,double averageScore){
         List<Info> subjects = scoreList.stream().map(Score::toSubjectInfo).collect(Collectors.toList());
         return ScoreSubjectResponse.of()
                 .averageScore(averageScore)
                 .subjects(subjects)
                 .build();
-    }
-
-    private static double getAverageScore(List<Score> scoreList, double averageScore) {
-        if (scoreList.size() > 0){
-            averageScore = scoreList.stream().mapToDouble(Score::getScore).average().orElse(0.0);
-        }
-        return averageScore;
     }
 }
