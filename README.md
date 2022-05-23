@@ -44,37 +44,41 @@ __참고__
 
 ``` 
 
-#### common(공통으로 사용되는 class를 모아두는 패키지)
+- __common__(공통으로 사용되는 class를 모아두는 패키지)  
+
 | package | description |
 |:--------|:--------:|
 | annotation |custom annotation을 관리하는 패키지|
-| error | custom error handlering을 위한 패키지 |
+| error | custom error handlering을 위한 패키지 |  
 
-#### config(설정파일을 관리하는 패키지)
+- __config__(설정파일을 관리하는 패키지)  
 
-#### controller(controller class를 관리하는 패키지)
+- __controller__(controller class를 관리하는 패키지)  
+
 | package | description |
 |:--------|:--------:|
-| api |Rest Controller를 관리하는 패키지|
+| api |Rest Controller를 관리하는 패키지|  
 
-#### domain(Entity,Dto class를 관리하는 패키지)
+- __domain__(Entity,Dto class를 관리하는 패키지)  
+
 | package | description |
 |:--------|:--------:|
 | request |request Dto를 관리하는 패키지|
 | response |response Dto를 관리하는 패키지|
-| entity |entity를 관리하는 패키지|
+| entity |entity를 관리하는 패키지|  
 
-#### repository(Repository class를 관리하는 패키지)
+- __repository__(Repository class를 관리하는 패키지)  
 
-#### service(Service class를 관리하는 패키지)
+- __service__(Service class를 관리하는 패키지)  
+
 | package | description |
 |:--------|:--------:|
-| impl |service 인터페이스의 구현체를 관리하는 패키지|
+| impl |service 인터페이스의 구현체를 관리하는 패키지|  
 
 ## ERD
 ![image](https://user-images.githubusercontent.com/42487599/169690068-76033fbc-bb5b-4528-a1ec-7aea4b7844a0.png)
 
-#### table.STUDENT 
+- __table.STUDENT__
 
 | Column | type | constraint | description |
 |:--------|:--------:|:--------:|:--------:|
@@ -84,7 +88,7 @@ __참고__
 | phone_number|varchar(15)|unique,notnull|전화번호|
 | school_type|varchar(10)|notnull|학교급|
 
-#### table.SUBJECT 
+- __table.SUBJECT__
 
 | Column | type | constraint | description |
 |:--------|:--------:|:--------:|:--------:|
@@ -92,7 +96,7 @@ __참고__
 | subject_name|varchar(50)|unique,notnull|과목이름|
 
 
-#### table.SCORE 
+- __table.SCORE__
 
 | Column | type | constraint | description |
 |:--------|:--------:|:--------:|:--------:|
