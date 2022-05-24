@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Table(name = "LECTURE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Lecture {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lecture_id")
     private Long id;
 
@@ -26,7 +26,7 @@ public class Lecture {
     @JoinColumn(name = "subject_id")
     private Subject subject;
 
-    @OneToOne(mappedBy = "score")
+    @OneToOne(mappedBy = "lecture",cascade = CascadeType.ALL)
     private Score score;
 
 

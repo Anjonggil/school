@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Student {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id")
     private Long id;
 
@@ -46,6 +46,7 @@ public class Student {
 
     public StudentResponse.Info toDto(){
         return StudentResponse.Info.of()
+                .id(this.id)
                 .name(this.name)
                 .age(this.age)
                 .schoolType(this.schoolType)

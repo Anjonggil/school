@@ -16,13 +16,15 @@ public class StudentResponse {
 
     @Getter
     public static class Info {
+        private Long id;
         private String name;
         private int age;
         private SchoolType schoolType;
         private String phoneNumber;
 
         @Builder(builderMethodName = "of",builderClassName = "of")
-        public Info(String name, int age, SchoolType schoolType, String phoneNumber) {
+        public Info(Long id, String name, int age, SchoolType schoolType, String phoneNumber) {
+            this.id = id;
             this.name = name;
             this.age = age;
             this.schoolType = schoolType;

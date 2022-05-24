@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "SCORE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Score {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)

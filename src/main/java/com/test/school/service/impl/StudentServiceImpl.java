@@ -68,11 +68,6 @@ public class StudentServiceImpl implements StudentService {
                     .build());
         }
 
-        List<Lecture> lectureList = lectureRepository.findScoresByStudentId(student.getId());
-        if (lectureList.size() > 0){
-            lectureRepository.deleteAll(lectureList);
-        }
-
         studentRepository.delete(student);
         return true;
     }

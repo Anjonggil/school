@@ -9,6 +9,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -33,7 +34,14 @@ public class ScoreSubjectResponse {
 
     @Builder(builderMethodName = "createSubjectsResponseBuilder",builderClassName = "createSubjectsResponseBuilder")
     public static ScoreSubjectResponse createSubjectsResponse(List<Lecture> lectureList, double averageScore){
-        List<Info> subjects = lectureList.stream().map(Lecture::toSubjectInfo).collect(Collectors.toList());
+        List<Info> subjects = new ArrayList<>();
+        subjects = lectureList.stream().map(lecture -> {
+            if (lecture.getScore()!= null) {
+                return lecture.toSubjectInfo();
+            }else{
+                return null;
+            }
+        }).filter(Objects::nonNull).collect(Collectors.toList());
         return ScoreSubjectResponse.of()
                 .averageScore(averageScore)
                 .subjects(subjects)

@@ -62,11 +62,6 @@ public class SubjectServiceImpl implements SubjectService {
                     .build());
         }
 
-        List<Lecture> lectureList = lectureRepository.findScoresBySubjectId(subject.getId());
-        if (lectureList.size() > 0){
-            lectureRepository.deleteAll(lectureList);
-        }
-
         subjectRepository.delete(subject);
         return true;
     }

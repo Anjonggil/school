@@ -11,6 +11,7 @@ public enum ErrorCode {
     SUBJECT_NOT_FOUND("SUBJECT_NOT_FOUND");
 
     private final String code;
+//    private final String message;
 
     ErrorCode (String code){
         this.code = code;

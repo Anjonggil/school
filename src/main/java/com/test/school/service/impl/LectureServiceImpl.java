@@ -18,7 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,7 +34,8 @@ public class LectureServiceImpl implements LectureService {
     @Override
     public ScoreSubjectResponse getAverageScoreByStudent(Long studentId) {
         Student findStudent = getStudent(studentId);
-        List<Score> scoreList = findStudent.getLectureList().stream().map(Lecture::getScore).collect(Collectors.toList());
+        List<Score> scoreList = findStudent.getLectureList()
+                .stream().map(Lecture::getScore).filter(Objects::nonNull).collect(Collectors.toList());
         double averageScore = getAverage(scoreList);
 
         return ScoreSubjectResponse.createSubjectsResponseBuilder()
@@ -44,7 +47,8 @@ public class LectureServiceImpl implements LectureService {
     @Override
     public ScoreStudentResponse getAverageScoreBySubject(Long subjectId) {
         Subject findSubject = getSubject(subjectId);
-        List<Score> scoreList = findSubject.getLectureList().stream().map(Lecture::getScore).collect(Collectors.toList());
+        List<Score> scoreList = findSubject.getLectureList()
+                .stream().map(Lecture::getScore).filter(Objects::nonNull).collect(Collectors.toList());
         double averageScore = getAverage(scoreList);
 
         return ScoreStudentResponse.createStudentsResponseBuilder()
