@@ -3,11 +3,11 @@ package com.test.school.service.impl;
 import com.test.school.common.error.BadRequestApiException;
 import com.test.school.common.error.ApiExceptionEntity;
 import com.test.school.common.error.ErrorCode;
-import com.test.school.domain.entity.Score;
+import com.test.school.domain.entity.Lecture;
 import com.test.school.domain.entity.Subject;
 import com.test.school.domain.request.SubjectRequest;
 import com.test.school.domain.response.SubjectResponse;
-import com.test.school.repository.ScoreRepository;
+import com.test.school.repository.LectureRepository;
 import com.test.school.repository.SubjectRepository;
 import com.test.school.service.SubjectService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubjectServiceImpl implements SubjectService {
     private final SubjectRepository subjectRepository;
-    private final ScoreRepository scoreRepository;
+    private final LectureRepository lectureRepository;
 
     @Override
     public SubjectResponse getSubjects(){
@@ -32,12 +32,11 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Transactional
     @Override
-    public Long createSubjects(SubjectRequest.Info subjectDto) {
+    public Subject createSubjects(SubjectRequest.Info subjectDto) {
         validateDuplicateSubject(subjectDto.getName());
         Subject subject = subjectDto.toEntity();
 
-        subjectRepository.save(subject);
-        return subject.getId();
+        return subjectRepository.save(subject);
     }
 
     //과목 중복 체크
@@ -63,9 +62,9 @@ public class SubjectServiceImpl implements SubjectService {
                     .build());
         }
 
-        List<Score> scoreList = scoreRepository.findScoresBySubjectId(subject.getId());
-        if (scoreList.size() > 0){
-            scoreRepository.deleteAll(scoreList);
+        List<Lecture> lectureList = lectureRepository.findScoresBySubjectId(subject.getId());
+        if (lectureList.size() > 0){
+            lectureRepository.deleteAll(lectureList);
         }
 
         subjectRepository.delete(subject);

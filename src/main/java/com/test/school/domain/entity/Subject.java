@@ -1,6 +1,5 @@
 package com.test.school.domain.entity;
 
-import com.test.school.domain.request.SubjectRequest;
 import com.test.school.domain.response.SubjectResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,7 +23,7 @@ public class Subject {
     private String name;
 
     @OneToMany(mappedBy = "subject")
-    private List<Score> scoreList = new ArrayList<>();
+    private List<Lecture> lectureList = new ArrayList<>();
 
     @Builder(builderMethodName = "of",builderClassName = "of")
     public Subject(Long id, String name) {
@@ -41,7 +40,7 @@ public class Subject {
 
     public double getAverage() {
         double averageScore = -1d;
-        if (this.scoreList.size() > 0) averageScore = this.scoreList.stream().mapToDouble(Score::getScore).average().orElse(0.0);
+        if (this.lectureList.size() > 0) averageScore = this.lectureList.stream().mapToDouble(Lecture::getScore).average().orElse(0.0);
         return averageScore;
     }
 }

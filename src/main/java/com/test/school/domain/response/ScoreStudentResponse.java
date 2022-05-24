@@ -1,6 +1,6 @@
 package com.test.school.domain.response;
 
-import com.test.school.domain.entity.Score;
+import com.test.school.domain.entity.Lecture;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,8 +30,8 @@ public class ScoreStudentResponse {
     }
 
     @Builder(builderMethodName = "createStudentsResponseBuilder",builderClassName = "createStudentsResponseBuilder")
-    public static ScoreStudentResponse createStudentsResponse(List<Score> scoreList,double averageScore){
-        List<Info> students = scoreList.stream().map(Score::toStudentInfo).collect(Collectors.toList());
+    public static ScoreStudentResponse createStudentsResponse(List<Lecture> lectureList, double averageScore){
+        List<Info> students = lectureList.stream().map(Lecture::toStudentInfo).collect(Collectors.toList());
         return ScoreStudentResponse.of()
                 .students(students)
                 .averageScore(averageScore)

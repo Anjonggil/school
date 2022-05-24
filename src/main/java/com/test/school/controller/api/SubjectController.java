@@ -1,8 +1,10 @@
 package com.test.school.controller.api;
 
 import com.test.school.common.JsonResultData;
+import com.test.school.domain.entity.Subject;
 import com.test.school.domain.request.SubjectRequest;
 import com.test.school.domain.response.SubjectResponse;
+import com.test.school.service.LectureService;
 import com.test.school.service.SubjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,6 +25,8 @@ import java.util.Map;
 public class SubjectController {
     private final SubjectService subjectService;
 
+    private final LectureService lectureService;
+
     @Operation(summary = "과목 조회 API", description = "과목 조회 API")
     @GetMapping("/subjects")
     public ResponseEntity<JsonResultData<SubjectResponse>> getSubjects(){
@@ -42,18 +46,13 @@ public class SubjectController {
             @Parameter(description = "Subject Request", required = true)
             @RequestBody @Valid SubjectRequest subjectRequest
     ){
-        Long id = subjectService.createSubjects(subjectRequest.getInfo());
-        if (id != null){
-            return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
-                    .data(null)
-                    .error(null)
-                    .build(),HttpStatus.CREATED);
-        }else{
-            return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
-                    .data(null)
-                    .error(null)
-                    .build(),HttpStatus.BAD_REQUEST);
-        }
+        Subject subject = subjectService.createSubjects(subjectRequest.getInfo());
+        lectureService.createLectureBySubject(subject);
+
+        return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
+                .data(null)
+                .error(null)
+                .build(),HttpStatus.CREATED);
     }
 
     @Operation(summary = "과목 삭제 API", description = "과목 삭제 API")

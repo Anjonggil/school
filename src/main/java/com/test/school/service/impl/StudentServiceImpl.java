@@ -3,11 +3,11 @@ package com.test.school.service.impl;
 import com.test.school.common.error.ApiExceptionEntity;
 import com.test.school.common.error.BadRequestApiException;
 import com.test.school.common.error.ErrorCode;
-import com.test.school.domain.entity.Score;
+import com.test.school.domain.entity.Lecture;
 import com.test.school.domain.entity.Student;
 import com.test.school.domain.request.StudentRequest;
 import com.test.school.domain.response.StudentResponse;
-import com.test.school.repository.ScoreRepository;
+import com.test.school.repository.LectureRepository;
 import com.test.school.repository.StudentRepository;
 import com.test.school.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
-    private final ScoreRepository scoreRepository;
+    private final LectureRepository lectureRepository;
 
     //학생 조회
     @Override
@@ -36,13 +36,12 @@ public class StudentServiceImpl implements StudentService {
     //학생 등록
     @Transactional
     @Override
-    public Long createStudents(StudentRequest.Info studentDto) {
+    public Student createStudents(StudentRequest.Info studentDto) {
         validateDuplicateStudent(studentDto.getPhoneNumber());
 
         Student student = studentDto.toEntity();
 
-        studentRepository.save(student);
-        return student.getId();
+        return studentRepository.save(student);
     }
 
     //학생중복체크
@@ -69,9 +68,9 @@ public class StudentServiceImpl implements StudentService {
                     .build());
         }
 
-        List<Score> scoreList = scoreRepository.findScoresByStudentId(student.getId());
-        if (scoreList.size() > 0){
-            scoreRepository.deleteAll(scoreList);
+        List<Lecture> lectureList = lectureRepository.findScoresByStudentId(student.getId());
+        if (lectureList.size() > 0){
+            lectureRepository.deleteAll(lectureList);
         }
 
         studentRepository.delete(student);

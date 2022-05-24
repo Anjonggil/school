@@ -1,15 +1,12 @@
 package com.test.school.domain.entity;
 
 import com.test.school.domain.SchoolType;
-import com.test.school.domain.request.StudentRequest;
 import com.test.school.domain.response.StudentResponse;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Getter
 @Entity
@@ -35,7 +32,7 @@ public class Student {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "student")
-    private List<Score> scoreList = new ArrayList<>();
+    private List<Lecture> lectureList = new ArrayList<>();
 
     @Builder(builderMethodName = "of",builderClassName = "of")
     public Student(Long id, String name, int age, SchoolType schoolType, String phoneNumber) {
@@ -57,7 +54,7 @@ public class Student {
 
     public double getAverage() {
         double averageScore = -1d;
-        if (this.scoreList.size() > 0) averageScore = this.scoreList.stream().mapToDouble(Score::getScore).average().orElse(0.0);
+        if (this.lectureList.size() > 0) averageScore = this.lectureList.stream().mapToDouble(Lecture::getScore).average().orElse(0.0);
         return averageScore;
     }
 }

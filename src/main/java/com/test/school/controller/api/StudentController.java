@@ -1,8 +1,10 @@
 package com.test.school.controller.api;
 
 import com.test.school.common.JsonResultData;
+import com.test.school.domain.entity.Student;
 import com.test.school.domain.request.StudentRequest;
 import com.test.school.domain.response.StudentResponse;
+import com.test.school.service.LectureService;
 import com.test.school.service.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,13 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.regex.Pattern;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 public class StudentController {
     private final StudentService studentService;
+    private final LectureService lectureService;
 
     @Operation(summary = "회원 조회 API", description = "회원 조회 API")
     @GetMapping("/students")
@@ -38,20 +40,15 @@ public class StudentController {
     @PostMapping("/students")
     public ResponseEntity<?> createStudents(
             @Parameter(description = "Student Request", required = true)
-            @RequestBody @Valid StudentRequest student
+            @RequestBody @Valid StudentRequest studentRequest
     ){
-        Long id = studentService.createStudents(student.getInfo());
-        if (id != null){
-            return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
-                    .data(null)
-                    .error(null)
-                    .build(),HttpStatus.CREATED);
-        }else{
-            return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
-                    .data(null)
-                    .error(null)
-                    .build(),HttpStatus.BAD_REQUEST);
-        }
+        Student student = studentService.createStudents(studentRequest.getInfo());
+        lectureService.createLectureByStudent(student);
+
+        return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
+                .data(null)
+                .error(null)
+                .build(),HttpStatus.CREATED);
     }
 
     @Operation(summary = "회원 삭제 API", description = "회원 삭제 API")
