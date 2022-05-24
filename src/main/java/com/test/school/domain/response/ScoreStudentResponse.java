@@ -1,6 +1,7 @@
 package com.test.school.domain.response;
 
 import com.test.school.domain.entity.Lecture;
+import com.test.school.domain.entity.Score;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

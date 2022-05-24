@@ -4,6 +4,7 @@ import com.test.school.common.error.ApiExceptionEntity;
 import com.test.school.common.error.BadRequestApiException;
 import com.test.school.common.error.ErrorCode;
 import com.test.school.domain.entity.Lecture;
+import com.test.school.domain.entity.Score;
 import com.test.school.domain.entity.Student;
 import com.test.school.domain.entity.Subject;
 import com.test.school.domain.request.ScoreRequest;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,55 +30,13 @@ public class LectureServiceImpl implements LectureService {
     private final StudentRepository studentRepository;
 
     @Override
-    @Transactional
-    public Long createScores(ScoreRequest.Info scoreDto, Long studentId, Long subjectId) {
-        Student findStudent = getStudent(studentId);
-        Subject findSubject = getSubject(subjectId);
-
-        Lecture lecture = Lecture.createStudentSubjectBuilder()
-                .scoreDto(scoreDto)
-                .student(findStudent)
-                .subject(findSubject)
-                .build();
-
-        lectureRepository.save(lecture);
-        return lecture.getId();
-    }
-
-    @Override
-    @Transactional
-    public Lecture updateScores(ScoreRequest.Info scoreDto, Long studentId, Long subjectId) {
-        Student findStudent = getStudent(studentId);
-        Subject findSubject = getSubject(subjectId);
-
-        Lecture findLecture = lectureRepository.findScoreByStudentAndSubject(findStudent, findSubject);
-        if (findLecture != null) findLecture.changeScore(scoreDto);
-
-        return findLecture;
-    }
-
-    @Override
-    @Transactional
-    public Boolean deleteScore(Long studentId, Long subjectId) {
-        Student findStudent = getStudent(studentId);
-        Subject findSubject = getSubject(subjectId);
-
-        Lecture findLecture = lectureRepository.findScoreByStudentAndSubject(findStudent, findSubject);
-        if (findLecture != null) {
-            lectureRepository.delete(findLecture);
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    @Override
     public ScoreSubjectResponse getAverageScoreByStudent(Long studentId) {
         Student findStudent = getStudent(studentId);
-        double averageScore = findStudent.getAverage();
+        List<Score> scoreList = findStudent.getLectureList().stream().map(Lecture::getScore).collect(Collectors.toList());
+        double averageScore = getAverage(scoreList);
 
         return ScoreSubjectResponse.createSubjectsResponseBuilder()
-                .scoreList(findStudent.getLectureList())
+                .lectureList(findStudent.getLectureList())
                 .averageScore(averageScore)
                 .build();
     }
@@ -84,10 +44,11 @@ public class LectureServiceImpl implements LectureService {
     @Override
     public ScoreStudentResponse getAverageScoreBySubject(Long subjectId) {
         Subject findSubject = getSubject(subjectId);
-        double averageScore = findSubject.getAverage();
+        List<Score> scoreList = findSubject.getLectureList().stream().map(Lecture::getScore).collect(Collectors.toList());
+        double averageScore = getAverage(scoreList);
 
         return ScoreStudentResponse.createStudentsResponseBuilder()
-                .scoreList(findSubject.getLectureList())
+                .lectureList(findSubject.getLectureList())
                 .averageScore(averageScore)
                 .build();
     }
@@ -124,21 +85,9 @@ public class LectureServiceImpl implements LectureService {
         }
     }
 
-    private Subject getSubject(Long subjectId){
-        Subject findSubject = subjectRepository.findSubjectById(subjectId);
-        if (findSubject == null) {
-            throw new BadRequestApiException(ApiExceptionEntity.builder()
-                    .errorCode(ErrorCode.SUBJECT_NOT_FOUND.getCode())
-                    .errorMessage("과목을 찾을 수 없습니다." + " [" + subjectId + "]")
-                    .build());
-        }
-        return findSubject;
-    }
-
-
-    private Student getStudent(Long studentId) {
+    public Student getStudent(Long studentId) {
         Student findStudent = studentRepository.findStudentById(studentId);
-        if (findStudent == null) {
+        if (findStudent == null){
             throw new BadRequestApiException(ApiExceptionEntity.builder()
                     .errorCode(ErrorCode.STUDENT_NOT_FOUND.getCode())
                     .errorMessage("학생을 찾을 수 없습니다." + " [" + studentId + "]")
@@ -147,4 +96,20 @@ public class LectureServiceImpl implements LectureService {
         return findStudent;
     }
 
+    public Subject getSubject(Long subjectId) {
+        Subject findSubject = subjectRepository.findSubjectById(subjectId);
+        if (findSubject == null){
+            throw new BadRequestApiException(ApiExceptionEntity.builder()
+                    .errorCode(ErrorCode.SUBJECT_NOT_FOUND.getCode())
+                    .errorMessage("과목을 찾을 수 없습니다." + " [" + subjectId + "]")
+                    .build());
+        }
+        return findSubject;
+    }
+
+    public double getAverage(List<Score> scoreList) {
+        double averageScore = -1d;
+        if (scoreList.size() > 0) averageScore = scoreList.stream().mapToDouble(Score::getScore).average().orElse(0.0);
+        return averageScore;
+    }
 }

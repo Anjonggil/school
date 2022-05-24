@@ -26,6 +26,9 @@ public class Lecture {
     @JoinColumn(name = "subject_id")
     private Subject subject;
 
+    @OneToOne(mappedBy = "score")
+    private Score score;
+
 
     @Builder(builderMethodName = "of", builderClassName = "of")
     public Lecture(Long id, Student student, Subject subject) {
@@ -42,14 +45,11 @@ public class Lecture {
                 .build();
     }
 
-//    public void changeScore(ScoreRequest.Info scoreDto) {
-//        this.score = scoreDto.getScore();
-//    }
-
     public ScoreSubjectResponse.Info toSubjectInfo(){
         return ScoreSubjectResponse.Info.builder()
                 .id(subject.getId())
                 .name(subject.getName())
+                .score(score.getScore())
                 .build();
     }
 
@@ -57,6 +57,7 @@ public class Lecture {
         return ScoreStudentResponse.Info.builder()
                 .id(student.getId())
                 .name(student.getName())
+                .score(score.getScore())
                 .build();
     }
 }

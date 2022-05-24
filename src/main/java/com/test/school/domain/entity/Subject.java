@@ -22,7 +22,7 @@ public class Subject {
     @Column(name = "subject_name",length = 50)
     private String name;
 
-    @OneToMany(mappedBy = "subject")
+    @OneToMany(mappedBy = "subject",cascade = CascadeType.ALL)
     private List<Lecture> lectureList = new ArrayList<>();
 
     @Builder(builderMethodName = "of",builderClassName = "of")
@@ -36,11 +36,5 @@ public class Subject {
                 .id(this.id)
                 .name(this.name)
                 .build();
-    }
-
-    public double getAverage() {
-        double averageScore = -1d;
-        if (this.lectureList.size() > 0) averageScore = this.lectureList.stream().mapToDouble(Lecture::getScore).average().orElse(0.0);
-        return averageScore;
     }
 }

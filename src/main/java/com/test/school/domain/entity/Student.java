@@ -7,6 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -31,7 +32,7 @@ public class Student {
     @Column(name = "phone_number",length = 15)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
     private List<Lecture> lectureList = new ArrayList<>();
 
     @Builder(builderMethodName = "of",builderClassName = "of")
@@ -50,11 +51,5 @@ public class Student {
                 .schoolType(this.schoolType)
                 .phoneNumber(this.phoneNumber)
                 .build();
-    }
-
-    public double getAverage() {
-        double averageScore = -1d;
-        if (this.lectureList.size() > 0) averageScore = this.lectureList.stream().mapToDouble(Lecture::getScore).average().orElse(0.0);
-        return averageScore;
     }
 }
