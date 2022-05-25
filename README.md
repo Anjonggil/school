@@ -76,13 +76,14 @@ __참고__
 | impl |service 인터페이스의 구현체를 관리하는 패키지|  
 
 ## ERD
-![image](https://user-images.githubusercontent.com/42487599/169690068-76033fbc-bb5b-4528-a1ec-7aea4b7844a0.png)
+![스크린샷 2022-05-25 오전 9 17 31](https://user-images.githubusercontent.com/42487599/170152548-814a6463-e8c3-4ffa-befd-574ce0c3f5d2.png)
+
 
 - __table.STUDENT__
 
 | Column | type | constraint | description |
 |:--------|:--------:|:--------:|:--------:|
-| student_id | bigint | primarykey,unique,notnull | 학생테이블 기본키 |
+| student_id | bigint | primarykey,unique,notnull | 학생테이블기본키 |
 | age|integer|notNull|학생나이
 | student_name|varchar(50)|notnull|학생이름|
 | phone_number|varchar(15)|unique,notnull|전화번호|
@@ -92,18 +93,26 @@ __참고__
 
 | Column | type | constraint | description |
 |:--------|:--------:|:--------:|:--------:|
-| subject_id | bigint | primarykey,unique,notnull | 과목테이블 기본키 |
+| subject_id | bigint | primarykey,unique,notnull | 과목테이블기본키 |
 | subject_name|varchar(50)|unique,notnull|과목이름|
 
 
-- __table.SCORE__
+- __table.STUDENT_SUBJECT__
 
 | Column | type | constraint | description |
 |:--------|:--------:|:--------:|:--------:|
-| score_id | bigint | primarykey,unique,notnull | 테이블 기본키 |
-| lecture|integer|notnull|점수|
+| stdent_subject_id | bigint | primarykey,unique,notnull | 테이블기본키 |
 | subject_id | bigint | foreign key,notnull | 과목아이디 |
 | student_id | bigint | foreign key,notnull | 학생아이디 |
+
+
+- __table.GRADE__
+
+| Column | type | constraint | description |
+|:--------|:--------:|:--------:|:--------:|
+|grade_id | bigint | primarykey,unique,notnull | 테이블기본키 |
+| stdent_subject_id | bigint | foreign key,notnull | 학생과목아이디 |
+| score | integer | notnull | 점수 |
 
 
 
