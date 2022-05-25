@@ -23,18 +23,18 @@ public class StudentRequest {
     @Getter
     public static class Info {
 
-        @Name
-        @Size(min = 1,max = 16)
+        @Name(message = "학생 이름은 한글/양어/숫자만을 포함합니다.")
+        @Size(min = 1,max = 16 ,message = "학생 이름은 최소 1자 최대 16글자 입니다.")
         private String name;
 
-        @Min(8)
-        @Max(19)
+        @Min(value = 8,message = "학생 나이의 최대값은 8입니다.")
+        @Max(value = 19,message = "학생 나이의 최댓값은 19입니다.")
         private int age;
 
-        @Type
+        @Type(message = "학교 등급은 ELEMENTARY, MIDDLE, HIGH 값만 유효합니다.")
         private SchoolType schoolType;
 
-        @Tel
+        @Tel(message = "전화번호 형식은 000-0000-0000 입니다.")
         private String phoneNumber;
 
         public Student toEntity(){

@@ -9,15 +9,16 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-@Table(name = "SCORE")
+@Table(name = "GRADE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Score {
+public class Grade {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "grade_id")
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_subject_id")
-    private Lecture lecture;
+    private StudentSubject studentSubject;
 
     private int score;
 
@@ -26,9 +27,9 @@ public class Score {
     }
 
     @Builder(builderMethodName = "of",builderClassName = "of")
-    public Score(Long id, Lecture lecture, int score) {
+    public Grade(Long id, StudentSubject studentSubject, int score) {
         this.id = id;
-        this.lecture = lecture;
+        this.studentSubject = studentSubject;
         this.score = score;
     }
 }

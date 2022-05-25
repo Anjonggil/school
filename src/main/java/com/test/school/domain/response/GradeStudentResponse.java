@@ -1,7 +1,6 @@
 package com.test.school.domain.response;
 
-import com.test.school.domain.entity.Lecture;
-import com.test.school.domain.entity.Score;
+import com.test.school.domain.entity.StudentSubject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +11,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
-public class ScoreStudentResponse {
+public class GradeStudentResponse {
     private Double averageScore;
     private List<Info> students = new ArrayList<>();
 
@@ -26,23 +25,23 @@ public class ScoreStudentResponse {
     }
 
     @Builder(builderMethodName = "of",builderClassName = "of")
-    public ScoreStudentResponse(List<Info> students, Double averageScore){
+    public GradeStudentResponse(List<Info> students, Double averageScore){
         this.averageScore = averageScore;
         this.students = students;
     }
 
     @Builder(builderMethodName = "createStudentsResponseBuilder",builderClassName = "createStudentsResponseBuilder")
-    public static ScoreStudentResponse createStudentsResponse(List<Lecture> lectureList, double averageScore){
+    public static GradeStudentResponse createStudentsResponse(List<StudentSubject> studentSubjectList, double averageScore){
         List<Info> students = new ArrayList<>();
-        if (averageScore != -1) students = lectureList.stream().map(lecture -> {
-            if (lecture.getScore()!= null) {
-                return lecture.toStudentInfo();
+        if (averageScore != -1) students = studentSubjectList.stream().map(studentSubject -> {
+            if (studentSubject.getGrade()!= null) {
+                return studentSubject.toStudentInfo();
             }else{
                 return null;
             }
         }).filter(Objects::nonNull).collect(Collectors.toList());
 
-        return ScoreStudentResponse.of()
+        return GradeStudentResponse.of()
                 .students(students)
                 .averageScore(averageScore)
                 .build();

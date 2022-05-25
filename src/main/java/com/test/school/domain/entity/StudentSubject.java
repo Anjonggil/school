@@ -1,7 +1,7 @@
 package com.test.school.domain.entity;
 
-import com.test.school.domain.response.ScoreStudentResponse;
-import com.test.school.domain.response.ScoreSubjectResponse;
+import com.test.school.domain.response.GradeStudentResponse;
+import com.test.school.domain.response.GradeSubjectResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,11 +11,11 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-@Table(name = "LECTURE")
+@Table(name = "STUDENT_SUBJECT")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Lecture {
+public class StudentSubject {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lecture_id")
+    @Column(name = "student_subject_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,38 +26,38 @@ public class Lecture {
     @JoinColumn(name = "subject_id")
     private Subject subject;
 
-    @OneToOne(mappedBy = "lecture",cascade = CascadeType.ALL)
-    private Score score;
+    @OneToOne(mappedBy = "studentSubject",cascade = CascadeType.ALL)
+    private Grade grade;
 
 
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public Lecture(Long id, Student student, Subject subject) {
+    public StudentSubject(Long id, Student student, Subject subject) {
         this.id = id;
         this.student = student;
         this.subject = subject;
     }
 
     @Builder(builderMethodName = "createStudentSubjectBuilder", builderClassName = "createStudentSubjectBuilder")
-    public static Lecture createStudentSubject(Student student, Subject subject){
-        return Lecture.of()
+    public static StudentSubject createStudentSubject(Student student, Subject subject){
+        return StudentSubject.of()
                 .student(student)
                 .subject(subject)
                 .build();
     }
 
-    public ScoreSubjectResponse.Info toSubjectInfo(){
-        return ScoreSubjectResponse.Info.builder()
+    public GradeSubjectResponse.Info toSubjectInfo(){
+        return GradeSubjectResponse.Info.builder()
                 .id(subject.getId())
                 .name(subject.getName())
-                .score(score.getScore())
+                .score(grade.getScore())
                 .build();
     }
 
-    public ScoreStudentResponse.Info toStudentInfo(){
-        return ScoreStudentResponse.Info.builder()
+    public GradeStudentResponse.Info toStudentInfo(){
+        return GradeStudentResponse.Info.builder()
                 .id(student.getId())
                 .name(student.getName())
-                .score(score.getScore())
+                .score(grade.getScore())
                 .build();
     }
 }

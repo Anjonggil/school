@@ -1,13 +1,12 @@
 package com.test.school.controller.api;
 
 import com.test.school.common.JsonResultData;
-import com.test.school.domain.entity.Lecture;
-import com.test.school.domain.entity.Score;
-import com.test.school.domain.request.ScoreRequest;
-import com.test.school.domain.response.ScoreStudentResponse;
-import com.test.school.domain.response.ScoreSubjectResponse;
-import com.test.school.service.LectureService;
-import com.test.school.service.ScoreService;
+import com.test.school.domain.entity.Grade;
+import com.test.school.domain.request.GradeRequest;
+import com.test.school.domain.response.GradeStudentResponse;
+import com.test.school.domain.response.GradeSubjectResponse;
+import com.test.school.service.StudentSubjectService;
+import com.test.school.service.GradeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
@@ -21,18 +20,18 @@ import javax.validation.Valid;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class ScoreController {
-    private final LectureService lectureService;
-    private final ScoreService scoreService;
+public class GradeController {
+    private final StudentSubjectService studentSubjectService;
+    private final GradeService gradeService;
 
     @Operation(summary = "점수 등록 API", description = "점수 등록 API")
     @PostMapping("/students/{studentId}/subjects/{subjectId}/scores")
     public ResponseEntity<?> createScores(
             @Parameter(description = "Student Id", required = true) @PathVariable("studentId") Long studentId,
             @Parameter(description = "Subject Id", required = true) @PathVariable("subjectId") Long subjectId,
-            @Parameter(description = "Score Request", required = true) @RequestBody @Valid ScoreRequest.Info scoreRequest){
+            @Parameter(description = "Score Request", required = true) @RequestBody @Valid GradeRequest.Info scoreRequest){
 
-        Long id = scoreService.createScores(scoreRequest, studentId,subjectId);
+        Long id = gradeService.createScores(scoreRequest, studentId,subjectId);
         if (id != null){
             return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
                     .data(null)
@@ -49,9 +48,9 @@ public class ScoreController {
     public ResponseEntity<?> updateScores(
             @Parameter(description = "Student Id", required = true) @PathVariable("studentId") Long studentId,
             @Parameter(description = "Subject Id", required = true) @PathVariable("subjectId") Long subjectId,
-            @Parameter(description = "Score Request", required = true) @RequestBody @Valid ScoreRequest.Info scoreRequest){
-        Score score = scoreService.updateScores(scoreRequest, studentId, subjectId);
-        if (score != null && score.getScore() == scoreRequest.getScore()){
+            @Parameter(description = "Score Request", required = true) @RequestBody @Valid GradeRequest.Info scoreRequest){
+        Grade grade = gradeService.updateScores(scoreRequest, studentId, subjectId);
+        if (grade != null && grade.getScore() == scoreRequest.getScore()){
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         }else {
             return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
@@ -63,7 +62,7 @@ public class ScoreController {
     public ResponseEntity<?> deleteScores(
             @Parameter(description = "Student Id", required = true) @PathVariable("studentId") Long studentId,
             @Parameter(description = "Subject Id", required = true) @PathVariable("subjectId") Long subjectId){
-        Boolean isDelete = scoreService.deleteScore(studentId,subjectId);
+        Boolean isDelete = gradeService.deleteScore(studentId,subjectId);
         if (isDelete){
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         }else {
@@ -75,10 +74,10 @@ public class ScoreController {
     @GetMapping("/students/{studentId}/average-score")
     public ResponseEntity<?> getAverageScoreByStudent(
             @Parameter(description = "Student Id", required = true) @PathVariable("studentId") Long studentId){
-        ScoreSubjectResponse scoreSubjectResponse = lectureService.getAverageScoreByStudent(studentId);
+        GradeSubjectResponse gradeSubjectResponse = studentSubjectService.getAverageScoreByStudent(studentId);
         return new ResponseEntity<>(
                 JsonResultData.ApiResultBuilder()
-                        .data(scoreSubjectResponse)
+                        .data(gradeSubjectResponse)
                         .error(null)
                         .build(),
                 HttpStatus.OK);
@@ -88,10 +87,10 @@ public class ScoreController {
     @GetMapping("/subjects/{subjectId}/average-score")
     public ResponseEntity<?> getAverageScoreBySubject(
             @Parameter(description = "Subject Id", required = true) @PathVariable("subjectId") Long subjectId){
-        ScoreStudentResponse scoreStudentResponse = lectureService.getAverageScoreBySubject(subjectId);
+        GradeStudentResponse gradeStudentResponse = studentSubjectService.getAverageScoreBySubject(subjectId);
         return new ResponseEntity<>(
                 JsonResultData.ApiResultBuilder()
-                        .data(scoreStudentResponse)
+                        .data(gradeStudentResponse)
                         .error(null)
                         .build(),
                 HttpStatus.OK);

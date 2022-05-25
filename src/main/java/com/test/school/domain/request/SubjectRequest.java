@@ -18,8 +18,8 @@ public class SubjectRequest {
     @Getter
     public static class Info {
 
-        @Name
-        @Size(min = 1,max = 16)
+        @Name(message = "과목 이름은 한글/양어/숫자만을 포함합니다.")
+        @Size(min = 1,max = 16 ,message = "과목 이름은 최소 1자 최대 16글자 입니다.")
         String name;
 
         public Subject toEntity(){

@@ -17,9 +17,9 @@ public class SchoolTypeValidator implements ConstraintValidator <Type, SchoolTyp
         }
 
         List<String> schoolTypeList = new ArrayList<>();
-        schoolTypeList.add("ELEMENTARY");
-        schoolTypeList.add("MIDDLE");
-        schoolTypeList.add("HIGH");
+        schoolTypeList.add(SchoolType.ELEMENTARY.getCode());
+        schoolTypeList.add(SchoolType.MIDDLE.getCode());
+        schoolTypeList.add(SchoolType.HIGH.getCode());
 
         return schoolTypeList.contains(value.getCode());
     }

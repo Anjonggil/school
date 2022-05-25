@@ -3,11 +3,10 @@ package com.test.school.service.impl;
 import com.test.school.common.error.BadRequestApiException;
 import com.test.school.common.error.ApiExceptionEntity;
 import com.test.school.common.error.ErrorCode;
-import com.test.school.domain.entity.Lecture;
 import com.test.school.domain.entity.Subject;
 import com.test.school.domain.request.SubjectRequest;
 import com.test.school.domain.response.SubjectResponse;
-import com.test.school.repository.LectureRepository;
+import com.test.school.repository.StudentSubjectRepository;
 import com.test.school.repository.SubjectRepository;
 import com.test.school.service.SubjectService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubjectServiceImpl implements SubjectService {
     private final SubjectRepository subjectRepository;
-    private final LectureRepository lectureRepository;
+    private final StudentSubjectRepository studentSubjectRepository;
 
     @Override
     public SubjectResponse getSubjects(){
@@ -43,9 +42,11 @@ public class SubjectServiceImpl implements SubjectService {
     private void validateDuplicateSubject(String name) {
         Subject findSubject = subjectRepository.findSubjectByName(name);
         if (findSubject != null){
+            StringBuilder sb = new StringBuilder();
+            sb.append(ErrorCode.ALREADY_EXIST_SUBJECT.getMessage()).append(" [").append(findSubject.getName()).append("]");
             throw new BadRequestApiException(ApiExceptionEntity.builder()
                     .errorCode(ErrorCode.ALREADY_EXIST_SUBJECT.getCode())
-                    .errorMessage("이미 존재하는 과목입니다." +"["+findSubject.getName()+"]")
+                    .errorMessage(sb.toString())
                     .build());
         }
     }
@@ -53,16 +54,18 @@ public class SubjectServiceImpl implements SubjectService {
     @Transactional
     @Override
     public Boolean deleteSubject(Long subjectId) {
-        Subject subject = subjectRepository.findSubjectById(subjectId);
+        Subject findSubject = subjectRepository.findSubjectById(subjectId);
 
-        if (subject == null){
+        if (findSubject == null){
+            StringBuilder sb = new StringBuilder();
+            sb.append(ErrorCode.STUDENT_NOT_FOUND.getMessage()).append(" [").append(subjectId).append("]");
             throw new BadRequestApiException(ApiExceptionEntity.builder()
                     .errorCode(ErrorCode.SUBJECT_NOT_FOUND.getCode())
-                    .errorMessage("과목을 찾을 수 없습니다." + " [" + subjectId + "]")
+                    .errorMessage(sb.toString())
                     .build());
         }
 
-        subjectRepository.delete(subject);
+        subjectRepository.delete(findSubject);
         return true;
     }
 }

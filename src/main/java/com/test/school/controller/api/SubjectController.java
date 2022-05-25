@@ -4,7 +4,7 @@ import com.test.school.common.JsonResultData;
 import com.test.school.domain.entity.Subject;
 import com.test.school.domain.request.SubjectRequest;
 import com.test.school.domain.response.SubjectResponse;
-import com.test.school.service.LectureService;
+import com.test.school.service.StudentSubjectService;
 import com.test.school.service.SubjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -15,9 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -25,7 +22,7 @@ import java.util.Map;
 public class SubjectController {
     private final SubjectService subjectService;
 
-    private final LectureService lectureService;
+    private final StudentSubjectService studentSubjectService;
 
     @Operation(summary = "과목 조회 API", description = "과목 조회 API")
     @GetMapping("/subjects")
@@ -47,7 +44,7 @@ public class SubjectController {
             @RequestBody @Valid SubjectRequest subjectRequest
     ){
         Subject subject = subjectService.createSubjects(subjectRequest.getInfo());
-        lectureService.createLectureBySubject(subject);
+        studentSubjectService.createLectureBySubject(subject);
 
         return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
                 .data(null)

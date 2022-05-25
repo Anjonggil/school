@@ -23,7 +23,7 @@ public class Subject {
     private String name;
 
     @OneToMany(mappedBy = "subject",cascade = CascadeType.ALL)
-    private List<Lecture> lectureList = new ArrayList<>();
+    private List<StudentSubject> studentSubjectList = new ArrayList<>();
 
     @Builder(builderMethodName = "of",builderClassName = "of")
     public Subject(Long id, String name) {

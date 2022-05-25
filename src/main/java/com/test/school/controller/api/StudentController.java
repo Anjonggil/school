@@ -4,7 +4,7 @@ import com.test.school.common.JsonResultData;
 import com.test.school.domain.entity.Student;
 import com.test.school.domain.request.StudentRequest;
 import com.test.school.domain.response.StudentResponse;
-import com.test.school.service.LectureService;
+import com.test.school.service.StudentSubjectService;
 import com.test.school.service.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class StudentController {
     private final StudentService studentService;
-    private final LectureService lectureService;
+    private final StudentSubjectService studentSubjectService;
 
     @Operation(summary = "회원 조회 API", description = "회원 조회 API")
     @GetMapping("/students")
@@ -43,7 +43,7 @@ public class StudentController {
             @RequestBody @Valid StudentRequest studentRequest
     ){
         Student student = studentService.createStudents(studentRequest.getInfo());
-        lectureService.createLectureByStudent(student);
+        studentSubjectService.createLectureByStudent(student);
 
         return new ResponseEntity<>(JsonResultData.ApiResultBuilder()
                 .data(null)

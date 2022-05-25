@@ -3,11 +3,13 @@ package com.test.school.common.error;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -33,11 +35,16 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<ApiExceptionEntity> exceptionHandler(HttpServletRequest request, final MethodArgumentNotValidException e){
+        List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (ObjectError error : allErrors) {
+            stringBuilder.append(error.getDefaultMessage()).append(" ");
+        }
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ApiExceptionEntity.builder()
                         .errorCode(ErrorCode.BAD_REQUEST_BODY.getCode())
-                        .errorMessage("파라미터 오류")
+                        .errorMessage(stringBuilder.toString())
                         .build());
     }
 
@@ -47,7 +54,7 @@ public class ApiExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ApiExceptionEntity.builder()
                         .errorCode(ErrorCode.BAD_REQUEST_BODY.getCode())
-                        .errorMessage("파라미터 오류")
+                        .errorMessage("Enum Code 오류")
                         .build());
     }
 }

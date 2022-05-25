@@ -7,7 +7,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -33,7 +32,7 @@ public class Student {
     private String phoneNumber;
 
     @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
-    private List<Lecture> lectureList = new ArrayList<>();
+    private List<StudentSubject> studentSubjectList = new ArrayList<>();
 
     @Builder(builderMethodName = "of",builderClassName = "of")
     public Student(Long id, String name, int age, SchoolType schoolType, String phoneNumber) {

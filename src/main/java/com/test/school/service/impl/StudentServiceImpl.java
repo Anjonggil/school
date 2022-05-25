@@ -3,11 +3,10 @@ package com.test.school.service.impl;
 import com.test.school.common.error.ApiExceptionEntity;
 import com.test.school.common.error.BadRequestApiException;
 import com.test.school.common.error.ErrorCode;
-import com.test.school.domain.entity.Lecture;
 import com.test.school.domain.entity.Student;
 import com.test.school.domain.request.StudentRequest;
 import com.test.school.domain.response.StudentResponse;
-import com.test.school.repository.LectureRepository;
+import com.test.school.repository.StudentSubjectRepository;
 import com.test.school.repository.StudentRepository;
 import com.test.school.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
-    private final LectureRepository lectureRepository;
+    private final StudentSubjectRepository studentSubjectRepository;
 
     //학생 조회
     @Override

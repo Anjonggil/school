@@ -101,7 +101,7 @@ __참고__
 | Column | type | constraint | description |
 |:--------|:--------:|:--------:|:--------:|
 | score_id | bigint | primarykey,unique,notnull | 테이블 기본키 |
-| lecture|integer|notnull|점수|
+| studentSubject|integer|notnull|점수|
 | subject_id | bigint | foreign key,notnull | 과목아이디 |
 | student_id | bigint | foreign key,notnull | 학생아이디 |
 
