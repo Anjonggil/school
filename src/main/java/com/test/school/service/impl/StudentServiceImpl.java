@@ -46,9 +46,10 @@ public class StudentServiceImpl implements StudentService {
     //학생중복체크
     private void validateDuplicateStudent(String phoneNumber) {
         Student findStudent = studentRepository.findStudentByPhoneNumber(phoneNumber);
-        StringBuilder sb = new StringBuilder();
-        sb.append(ErrorCode.ALREADY_EXIST_STUDENT.getMessage()).append(" [").append(findStudent.getName()).append("]");
+
         if (findStudent != null){
+            StringBuilder sb = new StringBuilder();
+            sb.append(ErrorCode.ALREADY_EXIST_STUDENT.getMessage()).append(" [").append(findStudent.getName()).append("]");
             throw new BadRequestApiException(ApiExceptionEntity.builder()
                     .errorCode(ErrorCode.ALREADY_EXIST_STUDENT.getCode())
                     .errorMessage(sb.toString())
@@ -61,9 +62,10 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Boolean deleteStudent(Long studentId) {
         Student findStudent = studentRepository.findStudentById(studentId);
-        StringBuilder sb = new StringBuilder();
-        sb.append(ErrorCode.STUDENT_NOT_FOUND.getMessage()).append(" [").append(studentId).append("]");
+
         if (findStudent == null){
+            StringBuilder sb = new StringBuilder();
+            sb.append(ErrorCode.STUDENT_NOT_FOUND.getMessage()).append(" [").append(studentId).append("]");
             throw new BadRequestApiException(ApiExceptionEntity.builder()
                     .errorCode(ErrorCode.STUDENT_NOT_FOUND.getCode())
                     .errorMessage(sb.toString())

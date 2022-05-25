@@ -3,6 +3,7 @@ package com.test.school.domain.entity;
 import com.test.school.domain.SchoolType;
 import com.test.school.domain.response.StudentResponse;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.util.ArrayList;

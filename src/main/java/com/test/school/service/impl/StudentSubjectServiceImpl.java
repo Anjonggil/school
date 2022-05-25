@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -59,15 +60,13 @@ public class StudentSubjectServiceImpl implements StudentSubjectService {
     @Transactional
     public void createLectureByStudent(Student student) {
         List<Subject> subjectList = subjectRepository.findByAll();
-        if (subjectList.size() > 0){
-            for (Subject subject : subjectList) {
-                StudentSubject studentSubject = StudentSubject.createStudentSubjectBuilder()
-                        .student(student)
-                        .subject(subject)
-                        .build();
 
-                studentSubjectRepository.save(studentSubject);
-            }
+        if (subjectList.size() > 0) {
+            List<StudentSubject> studentSubjectList = subjectList.stream().map(subject -> StudentSubject.createStudentSubjectBuilder()
+                    .student(student)
+                    .subject(subject)
+                    .build()).collect(Collectors.toList());
+            studentSubjectRepository.saveAll(studentSubjectList);
         }
     }
 
@@ -76,14 +75,11 @@ public class StudentSubjectServiceImpl implements StudentSubjectService {
     public void createLectureBySubject(Subject subject) {
         List<Student> studentList = studentRepository.findByAll();
         if (studentList.size() > 0){
-            for (Student student : studentList) {
-                StudentSubject studentSubject = StudentSubject.createStudentSubjectBuilder()
-                        .student(student)
-                        .subject(subject)
-                        .build();
-
-                studentSubjectRepository.save(studentSubject);
-            }
+            List<StudentSubject> studentSubjectList = studentList.stream().map(student -> StudentSubject.createStudentSubjectBuilder()
+                    .student(student)
+                    .subject(subject)
+                    .build()).collect(Collectors.toList());
+            studentSubjectRepository.saveAll(studentSubjectList);
         }
     }
 
