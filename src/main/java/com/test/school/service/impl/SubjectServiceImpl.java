@@ -58,7 +58,7 @@ public class SubjectServiceImpl implements SubjectService {
 
         if (findSubject == null){
             StringBuilder sb = new StringBuilder();
-            sb.append(ErrorCode.STUDENT_NOT_FOUND.getMessage()).append(" [").append(subjectId).append("]");
+            sb.append(ErrorCode.SUBJECT_NOT_FOUND.getMessage()).append(" [").append(subjectId).append("]");
             throw new BadRequestApiException(ApiExceptionEntity.builder()
                     .errorCode(ErrorCode.SUBJECT_NOT_FOUND.getCode())
                     .errorMessage(sb.toString())

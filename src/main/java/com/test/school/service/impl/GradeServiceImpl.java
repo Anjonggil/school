@@ -58,18 +58,21 @@ public class GradeServiceImpl implements GradeService {
     }
 
     public StudentSubject getLecture(Long studentId, Long subjectId){
+        StringBuilder sb = new StringBuilder();
         StudentSubject findStudentSubject = studentSubjectRepository.findLectureByStudentIdAndSubjectId(studentId, subjectId);
         if (findStudentSubject.getStudent() == null){
+            sb.append(ErrorCode.STUDENT_NOT_FOUND.getMessage()).append(" [").append(studentId).append("]");
             throw new BadRequestApiException(ApiExceptionEntity.builder()
                     .errorCode(ErrorCode.STUDENT_NOT_FOUND.getCode())
-                    .errorMessage("학생을 찾을 수 없습니다." + " [" + studentId + "]")
+                    .errorMessage(sb.toString())
                     .build());
         }
 
         if (findStudentSubject.getSubject() == null){
+            sb.append(ErrorCode.SUBJECT_NOT_FOUND.getMessage()).append(" [").append(subjectId).append("]");
             throw new BadRequestApiException(ApiExceptionEntity.builder()
                     .errorCode(ErrorCode.SUBJECT_NOT_FOUND.getCode())
-                    .errorMessage("과목을 찾을 수 없습니다." + " [" + subjectId + "]")
+                    .errorMessage(sb.toString())
                     .build());
         }
 

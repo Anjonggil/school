@@ -90,9 +90,11 @@ public class StudentSubjectServiceImpl implements StudentSubjectService {
     public Student getStudent(Long studentId) {
         Student findStudent = studentRepository.findStudentById(studentId);
         if (findStudent == null){
+            StringBuilder sb = new StringBuilder();
+            sb.append(ErrorCode.STUDENT_NOT_FOUND.getMessage()).append(" [").append(studentId).append("]");
             throw new BadRequestApiException(ApiExceptionEntity.builder()
                     .errorCode(ErrorCode.STUDENT_NOT_FOUND.getCode())
-                    .errorMessage("학생을 찾을 수 없습니다." + " [" + studentId + "]")
+                    .errorMessage(sb.toString())
                     .build());
         }
         return findStudent;
@@ -101,9 +103,11 @@ public class StudentSubjectServiceImpl implements StudentSubjectService {
     public Subject getSubject(Long subjectId) {
         Subject findSubject = subjectRepository.findSubjectById(subjectId);
         if (findSubject == null){
+            StringBuilder sb = new StringBuilder();
+            sb.append(ErrorCode.SUBJECT_NOT_FOUND.getMessage()).append(" [").append(subjectId).append("]");
             throw new BadRequestApiException(ApiExceptionEntity.builder()
                     .errorCode(ErrorCode.SUBJECT_NOT_FOUND.getCode())
-                    .errorMessage("과목을 찾을 수 없습니다." + " [" + subjectId + "]")
+                    .errorMessage(sb.toString())
                     .build());
         }
         return findSubject;

@@ -46,11 +46,12 @@ public class StudentServiceImpl implements StudentService {
     //학생중복체크
     private void validateDuplicateStudent(String phoneNumber) {
         Student findStudent = studentRepository.findStudentByPhoneNumber(phoneNumber);
-
+        StringBuilder sb = new StringBuilder();
+        sb.append(ErrorCode.ALREADY_EXIST_STUDENT.getMessage()).append(" [").append(findStudent.getName()).append("]");
         if (findStudent != null){
             throw new BadRequestApiException(ApiExceptionEntity.builder()
                     .errorCode(ErrorCode.ALREADY_EXIST_STUDENT.getCode())
-                    .errorMessage("이미 존재하는 학생입니다." +"["+findStudent.getPhoneNumber()+"]")
+                    .errorMessage(sb.toString())
                     .build());
         }
     }
@@ -58,16 +59,18 @@ public class StudentServiceImpl implements StudentService {
     //학생 삭제
     @Transactional
     @Override
-    public Boolean deleteStudent(Long id) {
-        Student student = studentRepository.findStudentById(id);
-        if (student == null){
+    public Boolean deleteStudent(Long studentId) {
+        Student findStudent = studentRepository.findStudentById(studentId);
+        StringBuilder sb = new StringBuilder();
+        sb.append(ErrorCode.STUDENT_NOT_FOUND.getMessage()).append(" [").append(studentId).append("]");
+        if (findStudent == null){
             throw new BadRequestApiException(ApiExceptionEntity.builder()
                     .errorCode(ErrorCode.STUDENT_NOT_FOUND.getCode())
-                    .errorMessage("학생을 찾을 수 없습니다." + " [" + id + "]")
+                    .errorMessage(sb.toString())
                     .build());
         }
 
-        studentRepository.delete(student);
+        studentRepository.delete(findStudent);
         return true;
     }
 }
