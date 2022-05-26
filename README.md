@@ -3,7 +3,7 @@
 ## 실행 방법
 
 - git clone을 통해 project를 받습니다.
-- scholApplication 실행
+- schoolApplication 실행
 - [postman](https://www.postman.com/) 혹은 [swagger](http://localhost:8080/swagger-ui/index.html#/)를 이용
 
 __참고__ 
